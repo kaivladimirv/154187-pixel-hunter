@@ -1,7 +1,7 @@
 # Личный проект «Пиксель хантер» [![Build status][travis-image]][travis-url]
 
 * Студент: [Владимир Каймонов](https://up.htmlacademy.ru/ecmascript/1/user/154187).
-* Наставник: `Неизвестно`.
+* Наставник: [Виталий Останин](https://up.htmlacademy.ru/ecmascript/1/user/248207).
 
 ---
 
