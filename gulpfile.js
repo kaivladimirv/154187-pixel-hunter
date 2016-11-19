@@ -13,6 +13,8 @@ const rename = require('gulp-rename');
 const imagemin = require('gulp-imagemin');
 const babel = require('gulp-babel');
 const sourcemaps = require('gulp-sourcemaps');
+const webpack = require('gulp-webpack');
+const babelLoader = require('babel-loader');
 
 gulp.task('style', function () {
   gulp.src('sass/style.scss')
@@ -40,9 +42,18 @@ gulp.task('style', function () {
 gulp.task('scripts', function () {
   return gulp.src('js/**/*.js')
     .pipe(plumber())
-    .pipe(sourcemaps.init())
-    .pipe(babel())
-    .pipe(sourcemaps.write('.'))
+    .pipe(webpack({
+      devtool: 'source-map',
+      entry: './js/main.js',
+      output: {
+        filename: 'main.js'
+      },
+      module: {
+        loaders: [
+          { test: /\.js$/, loader: 'babel-loader' },
+        ],
+      },
+    }))
     .pipe(gulp.dest('build/js/'));
 });
 
