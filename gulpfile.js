@@ -40,11 +40,10 @@ gulp.task('style', function () {
 });
 
 gulp.task('scripts', function () {
-  return gulp.src('js/**/*.js')
+  return gulp.src('js/main.js')
     .pipe(plumber())
     .pipe(webpack({
       devtool: 'source-map',
-      entry: './js/main.js',
       output: {
         filename: 'main.js'
       },
