@@ -1,5 +1,5 @@
 export default (template) => {
   let node = document.createElement('span');
-  node.innerHTML = template;
-  return node.cloneNode(true);
+  node.innerHTML = template.trim();
+  return node;
 };
