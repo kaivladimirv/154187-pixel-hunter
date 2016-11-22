@@ -1,4 +1,6 @@
 import createElementFromTemplate from './create-element-from-template';
+import renderElement from './render-element';
+import game2Element from './game-2';
 
 let template = `<header class="header">
   <div class="header__back">
@@ -57,4 +59,11 @@ let template = `<header class="header">
 </div>`;
 
 const moduleElement = createElementFromTemplate(template);
+
+moduleElement.querySelector('.game').onclick = (e) => {
+  if (e.target.parentElement.classList.contains('game__answer')) {
+    renderElement(game2Element);
+  }
+};
+
 export default moduleElement;

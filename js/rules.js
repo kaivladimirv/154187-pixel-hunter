@@ -1,4 +1,6 @@
 import createElementFromTemplate from './create-element-from-template';
+import renderElement from './render-element';
+import game1Element from './game-1';
 
 let template = `<header class="header">
   <div class="header__back">
@@ -26,4 +28,20 @@ let template = `<header class="header">
 </div>`;
 
 const moduleElement = createElementFromTemplate(template);
+
+const rulesSubmit = moduleElement.querySelector('.rules__button');
+moduleElement.querySelector('.rules__input').oninput = (e) => {
+  if (e.target.value) {
+    rulesSubmit.removeAttribute('disabled');
+  } else {
+    rulesSubmit.setAttribute('disabled', '');
+  }
+};
+
+moduleElement.querySelector('.rules__button').onclick = (e) => {
+  e.preventDefault();
+
+  renderElement(game1Element);
+};
+
 export default moduleElement;
