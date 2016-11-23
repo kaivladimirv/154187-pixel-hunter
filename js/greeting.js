@@ -1,4 +1,6 @@
 import createElementFromTemplate from './create-element-from-template';
+import renderElement from './render-element';
+import rulesElement from './rules';
 
 let template = `<div class="greeting  central--blur">
   <div class="greeting__logo"><img src="img/logo_big.png" width="201" height="89" alt="Pixel Hunter"></div>
@@ -15,4 +17,7 @@ let template = `<div class="greeting  central--blur">
 </div>`;
 
 const moduleElement = createElementFromTemplate(template);
+
+moduleElement.querySelector('.greeting__continue').onclick = () => renderElement(rulesElement);
+
 export default moduleElement;
