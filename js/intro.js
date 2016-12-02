@@ -1,7 +1,7 @@
 import createElementFromTemplate from './create-element-from-template';
 import renderElement from './render-element';
 import nextElement from './greeting';
-import getData from './data';
+import getData from './data/greeting-data';
 
 function getTemplate(data) {
   return `
@@ -14,7 +14,7 @@ function getTemplate(data) {
 export default function (data) {
   const moduleElement = createElementFromTemplate(getTemplate(data));
 
-  moduleElement.querySelector('.intro__asterisk').onclick = () => renderElement(nextElement(getData('greeting')));
+  moduleElement.querySelector('.intro__asterisk').onclick = () => renderElement(nextElement(getData()));
 
   return moduleElement;
 }
