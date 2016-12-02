@@ -1,4 +1,5 @@
 import renderElement from './render-element';
 import introElement from './intro';
+import getData from './data';
 
-renderElement(introElement);
+renderElement(introElement(getData('intro')));
