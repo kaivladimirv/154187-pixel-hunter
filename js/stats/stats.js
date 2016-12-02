@@ -1,5 +1,5 @@
 import createElementFromTemplate from '../create-element-from-template';
-import header from './header';
+import header from '../header';
 import resultItem from './result';
 
 function getTemplate(data) {
