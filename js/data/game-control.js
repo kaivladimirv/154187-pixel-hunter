@@ -2,7 +2,7 @@ import {games, gameSettings, extraList} from './game-data';
 
 export const initialData = {
   currentGameNumber: 0,
-  livesCount: gameSettings.maxLives,
+  livesCount: 0,
   maxLives: gameSettings.maxLives,
   timeLimit: gameSettings.timeLimit,
   time: 0,

@@ -8,6 +8,7 @@ import {
   initialData,
   getDataGame,
   setCurrentGameNumber,
+  setCountLives,
   setTime,
   gameIsExists,
   answerIsRight,
@@ -132,6 +133,7 @@ function startGame(gameNumber) {
 function createScreenGame() {
   const gameNumber = 1;
   gameState = setCurrentGameNumber(gameState, gameNumber);
+  gameState = setCountLives(gameState, gameState.maxLives);
 
   let screenGame = createElementFromTemplate('');
 

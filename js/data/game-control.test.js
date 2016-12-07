@@ -17,7 +17,12 @@ describe('Game', () => {
   });
 
   describe('Current game number', () => {
-    it('success: set current game number', () => assert.equal(setCurrentGameNumber(initialData, 1).currentGameNumber, 1));
+    it('success: set current game number', () => {
+      const newData = setCurrentGameNumber(initialData, 1);
+
+      assert.equal(newData.currentGameNumber, 1);
+      assert.notDeepEqual(initialData, newData);
+    });
     it('fail: set current game number', () => assert.throws(() => setCurrentGameNumber(initialData, -1)));
   });
 
@@ -27,7 +32,12 @@ describe('Game', () => {
   });
 
   describe('Lives', () => {
-    it('success: set count lives', () => assert.equal(setCountLives(initialData, 3).livesCount, 3));
+    it('success: set count lives', () => {
+      const newData = setCountLives(initialData, 3);
+
+      assert.equal(newData.livesCount, 3);
+      assert.notDeepEqual(initialData, newData);
+    });
 
     it('fail: set count lives', () => {
       assert.throws(() => setCountLives(initialData, -1));
@@ -36,7 +46,12 @@ describe('Game', () => {
   });
 
   describe('Time', () => {
-    it('success: set time', () => assert.equal(setTime(initialData, 10).time, 10));
+    it('success: set time', () => {
+      const newData = setTime(initialData, 10);
+
+      assert.equal(newData.time, 10);
+      assert.notDeepEqual(initialData, newData);
+    });
 
     it('fail: set time', () => {
       assert.throws(() => setTime(initialData, -1));
@@ -50,12 +65,18 @@ describe('Game', () => {
 
     it('Answer is fast', () => {
       stateGame = setTime(stateGame, gameSettings.timeLimitForFastAnswer - 1);
-      assert.equal(determineAnswerSpeed(stateGame).stats[gameNumber - 1], 'fast');
+      const newStateGame = determineAnswerSpeed(stateGame);
+
+      assert.equal(newStateGame.stats[gameNumber - 1], 'fast');
+      assert.notDeepEqual(stateGame, newStateGame);
     });
 
     it('Answer is slow', () => {
       stateGame = setTime(stateGame, gameSettings.timeLimitForSlowAnswer + 1);
-      assert.equal(determineAnswerSpeed(stateGame).stats[gameNumber - 1], 'slow');
+      const newStateGame = determineAnswerSpeed(stateGame);
+
+      assert.equal(newStateGame.stats[gameNumber - 1], 'slow');
+      assert.notDeepEqual(stateGame, newStateGame);
     });
   });
 });
