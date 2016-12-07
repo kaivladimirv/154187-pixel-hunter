@@ -27,7 +27,7 @@ function getAnswer(moduleElement) {
   }
 
   let index = 0;
-  for (const element of answersElements) {
+  for (let element of answersElements) {
     if (element.classList.contains('game__option--selected')) {
       return index;
     }

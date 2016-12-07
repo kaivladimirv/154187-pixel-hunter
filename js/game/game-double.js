@@ -35,7 +35,7 @@ function getAnswers(moduleElement) {
   }
 
   const answers = [];
-  for (const element of answersElements) {
+  for (let element of answersElements) {
     answers.push(element.value);
   }
 
