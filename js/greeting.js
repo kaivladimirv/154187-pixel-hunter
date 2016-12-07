@@ -1,7 +1,7 @@
 import createElementFromTemplate from './create-element-from-template';
 import renderElement from './render-element';
 import nextElement from './rules';
-import getData from './data';
+import getData from './data/rules-data';
 
 function getTemplate(data) {
   let logo = '<div class="greeting__logo"><img src="img/logo_big.png" width="201" height="89" alt="Pixel Hunter"></div>';
@@ -23,7 +23,7 @@ function getTemplate(data) {
 export default function (data) {
   const moduleElement = createElementFromTemplate(getTemplate(data));
 
-  moduleElement.querySelector('.greeting__continue').onclick = () => renderElement(nextElement(getData('rules')));
+  moduleElement.querySelector('.greeting__continue').onclick = () => renderElement(nextElement(getData()));
 
   return moduleElement;
 }
