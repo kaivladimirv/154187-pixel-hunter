@@ -1,7 +1,6 @@
 import createElementFromTemplate from './create-element-from-template';
-import renderElement from './render-element';
 import header from './header';
-import nextElement from './game/game';
+import startGame from './game/game';
 
 function getTemplate(data) {
   let form = `
@@ -37,8 +36,7 @@ export default function (data) {
   moduleElement.querySelector('.rules__button').onclick = (e) => {
     e.preventDefault();
 
-    let gameNumber = 1;
-    renderElement(nextElement(gameNumber));
+    startGame();
   };
 
   return moduleElement;

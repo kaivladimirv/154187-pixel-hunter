@@ -1,10 +1,7 @@
 import createElementFromTemplate from '../create-element-from-template';
-import renderElement from '../render-element';
-import nextGame from './game';
-import header from './header';
 import stats from './stats';
 
-function getTemplate(data) {
+function getTemplate(data, dataStats) {
   let content = `
     <form class="game__content">
       ${data.questions.map((value, index) => `
@@ -22,23 +19,43 @@ function getTemplate(data) {
     </form>`;
 
   return `
-    ${header(data)}
     <div class="game">
       <p class="game__task">${data.task}</p>
       ${content}
       <div class="stats">
-        ${stats(data.stats)}
+        ${stats(dataStats)}
       </div>
     </div>`;
 }
 
-export default function (data) {
-  const moduleElement = createElementFromTemplate(getTemplate(data));
+function getAnswers(moduleElement) {
+  const answersElements = moduleElement.querySelectorAll('[name^="question"]:checked');
+  if (answersElements.length !== 2) {
+    return [];
+  }
+
+  const answers = [];
+  for (const element of answersElements) {
+    answers.push(element.value);
+  }
+
+  return answers;
+}
+
+export default function (data, dataStats, onAnswer) {
+  const moduleElement = createElementFromTemplate(getTemplate(data, dataStats));
 
   moduleElement.querySelector('.game').onclick = (e) => {
-    if (e.target.parentElement.classList.contains('game__answer')) {
-      renderElement(nextGame(data.gameNumber + 1));
+    if (!e.target.parentElement.classList.contains('game__answer')) {
+      return;
     }
+
+    const answers = getAnswers(moduleElement);
+    if (answers.length !== 2) {
+      return;
+    }
+
+    onAnswer(answers);
   };
 
   return moduleElement;

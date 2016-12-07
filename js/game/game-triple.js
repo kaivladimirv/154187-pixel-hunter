@@ -1,10 +1,7 @@
 import createElementFromTemplate from '../create-element-from-template';
-import renderElement from '../render-element';
-import nextGame from './game';
-import header from './header';
 import stats from './stats';
 
-function getTemplate(data) {
+function getTemplate(data, dataStats) {
   let content = `
     <form class="game__content  game__content--triple">
       ${data.answers.map((value) => `
@@ -14,23 +11,44 @@ function getTemplate(data) {
     </form>`;
 
   return `
-    ${header(data)}
     <div class="game">
       <p class="game__task">${data.task}</p>
       ${content}
       <div class="stats">
-        ${stats(data.stats)}
+        ${stats(dataStats)}
       </div>
     </div>`;
 }
 
-export default function (data) {
-  const moduleElement = createElementFromTemplate(getTemplate(data));
+function getAnswer(moduleElement) {
+  const answersElements = moduleElement.querySelectorAll('.game__option');
+  if (!answersElements) {
+    return -1;
+  }
+
+  let index = 0;
+  for (const element of answersElements) {
+    if (element.classList.contains('game__option--selected')) {
+      return index;
+    }
+
+    index++;
+  }
+
+  return -1;
+}
+
+export default function (data, dataStats, onAnswer) {
+  const moduleElement = createElementFromTemplate(getTemplate(data, dataStats));
 
   moduleElement.querySelector('.game').onclick = (e) => {
-    if (e.target.classList.contains('game__option')) {
-      renderElement(nextGame(data.gameNumber + 1));
+    if (!e.target.classList.contains('game__option')) {
+      return;
     }
+
+    e.target.classList.add('game__option--selected');
+
+    onAnswer(getAnswer(moduleElement));
   };
 
   return moduleElement;

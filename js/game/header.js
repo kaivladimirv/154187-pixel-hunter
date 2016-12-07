@@ -9,7 +9,7 @@ export default function (data) {
           <img src="img/logo_small.png" width="101" height="44">
         </span>
       </div>
-      <h1 class="game__timer">${data.timer}</h1>
-      ${lives(data.lives)}
+      <h1 class="game__timer">${data.time}</h1>
+      ${lives(data.livesCount, data.maxLives)}
     </header>`;
 }

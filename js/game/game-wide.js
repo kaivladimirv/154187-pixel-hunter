@@ -1,10 +1,7 @@
 import createElementFromTemplate from '../create-element-from-template';
-import renderElement from '../render-element';
-import nextGame from './game';
-import header from './header';
 import stats from './stats';
 
-function getTemplate(data) {
+function getTemplate(data, dataStats) {
   let content = `
     <form class="game__content  game__content--wide">
       <div class="game__option">
@@ -21,23 +18,24 @@ function getTemplate(data) {
     </form>`;
 
   return `
-    ${header(data)}
     <div class="game">
       <p class="game__task">${data.task}</p>
       ${content}
       <div class="stats">
-        ${stats(data.stats)}
+        ${stats(dataStats)}
       </div>
     </div>`;
 }
 
-export default function (data) {
-  const moduleElement = createElementFromTemplate(getTemplate(data));
+export default function (data, dataStats, onAnswer) {
+  const moduleElement = createElementFromTemplate(getTemplate(data, dataStats));
 
   moduleElement.querySelector('.game').onclick = (e) => {
-    if (e.target.parentElement.classList.contains('game__answer')) {
-      renderElement(nextGame(data.gameNumber + 1));
+    if (!e.target.parentElement.classList.contains('game__answer') || !e.target.value) {
+      return;
     }
+
+    onAnswer(e.target.value);
   };
 
   return moduleElement;
