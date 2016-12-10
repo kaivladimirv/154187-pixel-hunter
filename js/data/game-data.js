@@ -1,6 +1,6 @@
-const gamesList = [
+export const tasks = [
   {
-    gameNumber: 1,
+    taskNumber: 1,
     type: 'double',
     task: 'Угадайте для каждого изображения фото или рисунок?',
     questions: [
@@ -17,7 +17,7 @@ const gamesList = [
     ]
   },
   {
-    gameNumber: 2,
+    taskNumber: 2,
     type: 'wide',
     task: 'Угадай, фото или рисунок?',
     question: {
@@ -27,7 +27,7 @@ const gamesList = [
     }
   },
   {
-    gameNumber: 3,
+    taskNumber: 3,
     type: 'triple',
     task: 'Найдите рисунок среди изображений',
     answers: [
@@ -49,7 +49,7 @@ const gamesList = [
     ]
   },
   {
-    gameNumber: 4,
+    taskNumber: 4,
     type: 'double',
     task: 'Угадайте для каждого изображения фото или рисунок?',
     questions: [
@@ -66,7 +66,7 @@ const gamesList = [
     ]
   },
   {
-    gameNumber: 5,
+    taskNumber: 5,
     type: 'wide',
     task: 'Угадай, фото или рисунок?',
     question: {
@@ -76,7 +76,7 @@ const gamesList = [
     }
   },
   {
-    gameNumber: 6,
+    taskNumber: 6,
     type: 'triple',
     task: 'Найдите рисунок среди изображений',
     answers: [
@@ -98,7 +98,7 @@ const gamesList = [
     ]
   },
   {
-    gameNumber: 7,
+    taskNumber: 7,
     type: 'double',
     task: 'Угадайте для каждого изображения фото или рисунок?',
     questions: [
@@ -115,7 +115,7 @@ const gamesList = [
     ]
   },
   {
-    gameNumber: 8,
+    taskNumber: 8,
     type: 'wide',
     task: 'Угадай, фото или рисунок?',
     question: {
@@ -125,7 +125,7 @@ const gamesList = [
     }
   },
   {
-    gameNumber: 9,
+    taskNumber: 9,
     type: 'triple',
     task: 'Найдите рисунок среди изображений',
     answers: [
@@ -147,7 +147,7 @@ const gamesList = [
     ]
   },
   {
-    gameNumber: 10,
+    taskNumber: 10,
     type: 'double',
     task: 'Угадайте для каждого изображения фото или рисунок?',
     questions: [
@@ -164,8 +164,6 @@ const gamesList = [
     ]
   }
 ];
-
-export const games = gamesList;
 
 export const gameSettings = {
   maxLives: 3,

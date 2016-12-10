@@ -2,33 +2,36 @@ import assert from 'assert';
 import {gameSettings} from './game-data';
 import {
   initialData,
-  gameIsExists,
+  taskIsExists,
   setCountLives,
   setTime,
-  setCurrentGameNumber,
-  getDataGame,
-  determineAnswerSpeed
+  setCurrentTaskNumber,
+  getTask,
+  determineAnswerSpeed,
+  determineAnswerAsRight,
+  determineAnswerAsWrong
 } from './game-control';
 
 describe('Game', () => {
-  it('is not exists', () => {
-    assert.equal(gameIsExists(100000), false);
-    assert.equal(gameIsExists('abc'), false);
+
+  it('Task is not exists', () => {
+    assert.equal(taskIsExists(100000), false);
+    assert.equal(taskIsExists('abc'), false);
   });
 
-  describe('Current game number', () => {
-    it('success: set current game number', () => {
-      const newData = setCurrentGameNumber(initialData, 1);
+  describe('Current task number', () => {
+    it('success: set current task number', () => {
+      const newData = setCurrentTaskNumber(initialData, 1);
 
-      assert.equal(newData.currentGameNumber, 1);
-      assert.notDeepEqual(initialData, newData);
+      assert.equal(newData.currentTaskNumber, 1);
+      assert.notEqual(newData, initialData);
     });
-    it('fail: set current game number', () => assert.throws(() => setCurrentGameNumber(initialData, -1)));
+    it('fail: set current task number', () => assert.throws(() => setCurrentTaskNumber(initialData, -1)));
   });
 
-  describe('Get game', () => {
-    it('success: get data', () => assert.equal(getDataGame(1).gameNumber, 1));
-    it('fail: get data', () => assert.throws(() => getDataGame(-1)));
+  describe('Get task', () => {
+    it('success: get data', () => assert.equal(getTask(1).taskNumber, 1));
+    it('fail: get data', () => assert.throws(() => getTask(-1)));
   });
 
   describe('Lives', () => {
@@ -36,7 +39,7 @@ describe('Game', () => {
       const newData = setCountLives(initialData, 3);
 
       assert.equal(newData.livesCount, 3);
-      assert.notDeepEqual(initialData, newData);
+      assert.notEqual(newData, initialData);
     });
 
     it('fail: set count lives', () => {
@@ -60,23 +63,43 @@ describe('Game', () => {
   });
 
   describe('Answer speed', () => {
-    let gameNumber = 1;
-    let stateGame = setCurrentGameNumber(initialData, gameNumber);
+    let taskNumber = 1;
+    let stateGame = setCurrentTaskNumber(initialData, taskNumber);
 
     it('Answer is fast', () => {
       stateGame = setTime(stateGame, gameSettings.timeLimitForFastAnswer - 1);
       const newStateGame = determineAnswerSpeed(stateGame);
 
-      assert.equal(newStateGame.stats[gameNumber - 1], 'fast');
-      assert.notDeepEqual(stateGame, newStateGame);
+      assert.equal(newStateGame.stats[taskNumber - 1], 'fast');
+      assert.notEqual(stateGame, newStateGame);
     });
 
     it('Answer is slow', () => {
       stateGame = setTime(stateGame, gameSettings.timeLimitForSlowAnswer + 1);
       const newStateGame = determineAnswerSpeed(stateGame);
 
-      assert.equal(newStateGame.stats[gameNumber - 1], 'slow');
-      assert.notDeepEqual(stateGame, newStateGame);
+      assert.equal(newStateGame.stats[taskNumber - 1], 'slow');
+      assert.notEqual(stateGame, newStateGame);
     });
   });
+
+  describe('Answer result', () => {
+    let taskNumber = 1;
+    let stateGame = setCurrentTaskNumber(initialData, taskNumber);
+
+    it('Answer is right', () => {
+      const newStateGame = determineAnswerAsRight(stateGame);
+
+      assert.equal(newStateGame.stats[taskNumber - 1], 'correct');
+      assert.notEqual(stateGame, newStateGame);
+    });
+
+    it('Answer is wrong', () => {
+      const newStateGame = determineAnswerAsWrong(stateGame);
+
+      assert.equal(newStateGame.stats[taskNumber - 1], 'wrong');
+      assert.notEqual(stateGame, newStateGame);
+    });
+  });
+
 });

@@ -2,7 +2,8 @@ let data = {
   title: 'Победа!',
   results: [
     {
-      gameNumber: 1,
+      taskNumber: 1,
+      status: 'success',
       stats: [
         'wrong',
         'slow',
@@ -43,7 +44,7 @@ let data = {
       ]
     },
     {
-      gameNumber: 2,
+      taskNumber: 2,
       status: 'fail',
       stats: [
         'wrong',
@@ -61,7 +62,7 @@ let data = {
       extra: []
     },
     {
-      gameNumber: 3,
+      taskNumber: 3,
       status: 'success',
       stats: [
         'wrong',

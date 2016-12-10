@@ -1,32 +1,18 @@
-import createElementFromTemplate from '../create-element-from-template';
-import renderElement from '../render-element';
-import header from './header';
-import gameDouble from './game-double';
-import gameWide from './game-wide';
-import gameTriple from './game-triple';
-import {
-  initialData,
-  getDataGame,
-  setCurrentGameNumber,
-  setCountLives,
-  setTime,
-  gameIsExists,
-  answerIsRight,
-  determineAnswerSpeed,
-  determineAnswerAsRight,
-  determineAnswerAsWrong,
-  calculatePoints
-} from '../data/game-control';
-import showStats from '../stats/stats';
-import getDataStats from '../stats/data';
+import {createElementFromTemplate, renderElement} from '../utils';
+import HeaderView from './header-view';
+import TaskDoubleView from './task-double-view';
+import TaskWideView from './task-wide-view';
+import TaskTripleView from './task-triple-view';
+import gameModel from './game-model';
+import showStats from '../stats/stats-view';
+import getDataStats from '../data/stats-data';
 
-let gameState = initialData;
 let timer;
 let headerGame;
 let contentGame;
 
 function createHeader() {
-  return createElementFromTemplate(header(gameState));
+  return new HeaderView(gameModel.state).element;
 }
 
 function updateHeader() {
@@ -36,24 +22,33 @@ function updateHeader() {
   headerGame = newHeader;
 }
 
-function getContentGame(game, stats) {
-  switch (game.type) {
+function getContentGame() {
+  let taskContent;
+  let task = gameModel.getTask();
+
+  switch (task.type) {
     case 'double':
-      return gameDouble(game, stats, onAnswer);
+      taskContent = new TaskDoubleView(task, gameModel.getStats());
+      break;
 
     case 'wide':
-      return gameWide(game, stats, onAnswer);
+      taskContent = new TaskWideView(task, gameModel.getStats());
+      break;
 
     case 'triple':
-      return gameTriple(game, stats, onAnswer);
+      taskContent = new TaskTripleView(task, gameModel.getStats());
+      break;
 
     default:
-      throw new Error(`Unknown type game ${game.type}`);
+      throw new Error(`Unknown type task ${task.type}`);
   }
+
+  taskContent.onAnswer = onAnswer;
+  return taskContent.element;
 }
 
-function updateContentGame(game) {
-  const newContent = getContentGame(game, gameState.stats);
+function updateContentGame() {
+  const newContent = getContentGame();
 
   contentGame.parentElement.replaceChild(newContent, contentGame);
   contentGame = newContent;
@@ -62,34 +57,23 @@ function updateContentGame(game) {
 function onAnswer(answer) {
   stopTimer();
 
-  saveAnswer(answer);
+  gameModel.saveAnswer(answer);
 
-  nextGame();
-}
-
-function saveAnswer(answer) {
-  if (answerIsRight(gameState.currentGameNumber, answer)) {
-    gameState = determineAnswerAsRight(gameState);
-    gameState = determineAnswerSpeed(gameState);
-  } else {
-    gameState = determineAnswerAsWrong(gameState);
-  }
+  nextTask();
 }
 
 function startTimer() {
-  gameState = setTime(gameState, 0);
-  updateHeader(gameState);
+  gameModel.resetTime();
+  updateHeader();
 
   timer = setInterval(() => {
-    const time = gameState.time + 1;
-    if (time >= gameState.timeLimit) {
+    if (gameModel.timeIsOver()) {
       stopGame();
       return;
     }
 
-    gameState = setTime(gameState, time);
-    updateHeader(gameState);
-
+    gameModel.tick();
+    updateHeader();
   }, 1000);
 }
 
@@ -97,50 +81,44 @@ function stopTimer() {
   clearInterval(timer);
 }
 
-function stopGame() {
-  stopTimer();
-
-  gameState = determineAnswerAsWrong(gameState);
-
-  nextGame();
-}
-
-function nextGame() {
-  const nextGameNumber = gameState.currentGameNumber + 1;
-
-  if ((gameState.livesCount === 0) || !gameIsExists(nextGameNumber)) {
-    endGame();
-    return;
-  }
-
-  startGame(nextGameNumber);
-}
-
-function endGame() {
-  gameState = calculatePoints(gameState);
-
-  renderElement(showStats(getDataStats()));
-}
-
-function startGame(gameNumber) {
-  gameState = setCurrentGameNumber(gameState, gameNumber);
-
-  updateContentGame(getDataGame(gameNumber));
+function startTask() {
+  updateContentGame();
 
   startTimer();
 }
 
-function createScreenGame() {
-  const gameNumber = 1;
-  gameState = setCurrentGameNumber(gameState, gameNumber);
-  gameState = setCountLives(gameState, gameState.maxLives);
+function nextTask() {
+  if (!gameModel.hasLives() || !gameModel.nextTaskIsExists()) {
+    endGame();
+    return;
+  }
 
+  gameModel.nextTask();
+
+  startTask();
+}
+
+function stopGame() {
+  stopTimer();
+
+  gameModel.saveAnswer([]);
+
+  nextTask();
+}
+
+function endGame() {
+  gameModel.calcResult();
+
+  renderElement(showStats(getDataStats()));
+}
+
+function createScreenGame() {
   let screenGame = createElementFromTemplate('');
 
   headerGame = createHeader();
   screenGame.appendChild(headerGame);
 
-  contentGame = getContentGame(getDataGame(gameNumber), gameState.stats);
+  contentGame = getContentGame();
   screenGame.appendChild(contentGame);
 
   renderElement(screenGame);
