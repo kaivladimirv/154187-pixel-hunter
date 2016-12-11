@@ -1,35 +1,36 @@
-import {games, gameSettings, extraList} from './game-data';
+import {mergeObjects, cloneObject} from '../utils';
+import {gameSettings, tasks, extraList} from './game-data';
 
 export const initialData = {
-  currentGameNumber: 0,
-  livesCount: 0,
+  currentTaskNumber: 1,
+  livesCount: gameSettings.maxLives,
   maxLives: gameSettings.maxLives,
-  timeLimit: gameSettings.timeLimit,
   time: 0,
+  timeLimit: gameSettings.timeLimit,
   points: gameSettings.pointsPerRightAnswer,
   total: 0,
   totalFinal: 0,
-  stats: new Array(games.length).fill('unknown'),
+  stats: new Array(tasks.length).fill('unknown'),
   extra: {}
 };
 
-export const getDataGame = (gameNumber) => {
-  if (!gameIsExists(gameNumber)) {
-    throw new RangeError(`Game number ${gameNumber} does not exist`);
+export const getTask = (taskNumber) => {
+  if (!isTaskExists(taskNumber)) {
+    throw new RangeError(`Task number ${taskNumber} does not exist`);
   }
 
-  return games[gameNumber - 1];
+  return tasks[taskNumber - 1];
 };
 
-export const gameIsExists = (gameNumber) => {
-  if (isNaN(parseInt(gameNumber, 10))) {
+export const isTaskExists = (taskNumber) => {
+  if (isNaN(parseInt(taskNumber, 10))) {
     return false;
   }
 
-  return !!games[gameNumber - 1];
+  return !!tasks[taskNumber - 1];
 };
 
-export const setCountLives = (game, count) => {
+export const setCountLives = (stateGame, count) => {
   if (count < 0) {
     throw new RangeError('Number of lives can not be negative');
   }
@@ -37,12 +38,12 @@ export const setCountLives = (game, count) => {
     throw new RangeError(`Number of lives can not be more than ${gameSettings.maxLives}`);
   }
 
-  return Object.assign({}, game, {
+  return Object.assign({}, stateGame, {
     livesCount: count
   });
 };
 
-export const setTime = (game, time) => {
+export const setTime = (stateGame, time) => {
   if (time < 0) {
     throw new RangeError('Time can not be negative');
   }
@@ -50,81 +51,81 @@ export const setTime = (game, time) => {
     throw new RangeError(`Time can not be more than ${gameSettings.timeLimit}`);
   }
 
-  return Object.assign({}, game, {
+  return Object.assign({}, stateGame, {
     time: time
   });
 };
 
-export const setCurrentGameNumber = (game, gameNumber) => {
-  if (!gameIsExists(gameNumber)) {
-    throw new RangeError(`Game number ${gameNumber} does not exist`);
+export const setCurrentTaskNumber = (stateGame, taskNumber) => {
+  if (!isTaskExists(taskNumber)) {
+    throw new RangeError(`Task number ${taskNumber} does not exist`);
   }
 
-  return Object.assign({}, game, {
-    currentGameNumber: gameNumber
+  return Object.assign({}, stateGame, {
+    currentTaskNumber: taskNumber
   });
 };
 
-export const answerIsRight = (gameNumber, answer) => {
-  const game = getDataGame(gameNumber);
+export const isRightAnswer = (taskNumber, answer) => {
+  const task = getTask(taskNumber);
 
-  switch (game.type) {
+  switch (task.type) {
     case 'double':
-      if (game.questions.length !== answer.length) {
+      if (task.questions.length !== answer.length) {
         return false;
       }
 
-      return answer.filter((value, index) => game.questions[index].type === value).length === answer.length;
+      return answer.filter((value, index) => task.questions[index].type === value).length === answer.length;
 
     case 'wide':
-      return (answer && (answer === game.question.type));
+      return (answer && (answer === task.question.type));
 
     case 'triple':
-      return (Number.isInteger(answer) && game.answers[answer].type === 'paint');
+      return (Number.isInteger(answer) && task.answers[answer].type === 'paint');
 
     default:
-      throw new Error(`Unknown type game ${game.type}`);
+      throw new Error(`Unknown type task ${task.type}`);
   }
 };
 
-export const determineAnswerAsRight = (game) => setStatus(game, 'correct');
+export const determineAnswerAsRight = (stateGame) => setStatus(stateGame, 'correct');
 
-export const determineAnswerAsWrong = (game) => {
-  game = setCountLives(game, game.livesCount - 1);
+export const determineAnswerAsWrong = (stateGame) => {
+  let newStateGame = setCountLives(stateGame, stateGame.livesCount - 1);
 
-  return setStatus(game, 'wrong');
+  return setStatus(newStateGame, 'wrong');
 };
 
-export const determineAnswerSpeed = (game) => {
+export const determineAnswerSpeed = (stateGame) => {
   let speedName;
 
-  if (answerIsFast(game.time)) {
+  if (isFastAnswer(stateGame.time)) {
     speedName = 'fast';
   }
-  if (answerIsSlow(game.time)) {
+  if (isSlowAnswer(stateGame.time)) {
     speedName = 'slow';
   }
 
   if (!speedName) {
-    return game;
+    return stateGame;
   }
 
-  game = setStatus(game, speedName);
-  return addPointsToExtraStats(game, speedName, 1);
+  let newStateGame = setStatus(stateGame, speedName);
+  return addPointsToExtraStats(newStateGame, speedName, 1);
 };
 
-export const calculatePoints = (game) => {
-  const countCorrect = getCountAnswersByResultType(game, 'correct');
-  const countFast = getCountAnswersByResultType(game, 'fast');
-  const countSlow = getCountAnswersByResultType(game, 'slow');
+export const calculatePoints = (stateGame) => {
+  const countCorrect = getCountAnswersByResultType(stateGame, 'correct');
+  const countFast = getCountAnswersByResultType(stateGame, 'fast');
+  const countSlow = getCountAnswersByResultType(stateGame, 'slow');
 
   const bonusPerFast = countFast * getPointsByResultType('fast');
-  const bonusPerLives = game.livesCount * gameSettings.pointsPerEachLife;
+  const bonusPerLives = stateGame.livesCount * gameSettings.pointsPerEachLife;
   const penaltyPerSlow = countSlow * getPointsByResultType('slow');
 
   const total = (countCorrect + countFast + countSlow) * getPointsByResultType('correct');
 
-  let newStateGame = cloneObject(game);
+  let newStateGame = cloneObject(stateGame);
   if (bonusPerLives) {
     newStateGame = addPointsToExtraStats(newStateGame, 'heart', newStateGame.livesCount);
   }
@@ -134,8 +135,8 @@ export const calculatePoints = (game) => {
   return newStateGame;
 };
 
-function getCountAnswersByResultType(game, resultType) {
-  return game.stats.filter((value) => value === resultType).length;
+function getCountAnswersByResultType(stateGame, resultType) {
+  return stateGame.stats.filter((value) => value === resultType).length;
 }
 
 function getPointsByResultType(resultType) {
@@ -153,29 +154,29 @@ function getPointsByResultType(resultType) {
   }
 }
 
-function answerIsFast(time) {
+function isFastAnswer(time) {
   return time < gameSettings.timeLimitForFastAnswer;
 }
 
-function answerIsSlow(time) {
+function isSlowAnswer(time) {
   return time > gameSettings.timeLimitForSlowAnswer;
 }
 
-function setStatus(game, statusName) {
+function setStatus(stateGame, statusName) {
   if (!statusName) {
     throw new Error(`Unknown status game ${statusName}`);
   }
 
-  let stats = [...game.stats];
+  let stats = [...stateGame.stats];
 
-  stats[game.currentGameNumber - 1] = statusName;
+  stats[stateGame.currentTaskNumber - 1] = statusName;
 
-  return mergeObjects(game, {
+  return mergeObjects(stateGame, {
     stats: stats
   });
 }
 
-function addPointsToExtraStats(game, name, value) {
+function addPointsToExtraStats(stateGame, name, value) {
   const initialValue = {
     name: name,
     title: extraList[name].title,
@@ -184,7 +185,7 @@ function addPointsToExtraStats(game, name, value) {
     total: 0,
   };
 
-  let extra = Object.assign({}, game.extra);
+  let extra = Object.assign({}, stateGame.extra);
 
   if (!extra[name]) {
     extra[name] = initialValue;
@@ -193,15 +194,7 @@ function addPointsToExtraStats(game, name, value) {
   extra[name].value += value;
   extra[name].total = extra[name].value * extra[name].points;
 
-  return mergeObjects(game, {
+  return mergeObjects(stateGame, {
     extra: extra
   });
-}
-
-function mergeObjects(...objects) {
-  return Object.assign({}, ...objects);
-}
-
-function cloneObject(object) {
-  return JSON.parse(JSON.stringify(object));
 }
