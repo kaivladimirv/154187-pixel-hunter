@@ -2,7 +2,7 @@ import assert from 'assert';
 import {gameSettings} from './game-data';
 import {
   initialData,
-  taskIsExists,
+  isTaskExists,
   setCountLives,
   setTime,
   setCurrentTaskNumber,
@@ -15,8 +15,8 @@ import {
 describe('Game', () => {
 
   it('Task is not exists', () => {
-    assert.equal(taskIsExists(100000), false);
-    assert.equal(taskIsExists('abc'), false);
+    assert.equal(isTaskExists(100000), false);
+    assert.equal(isTaskExists('abc'), false);
   });
 
   describe('Current task number', () => {

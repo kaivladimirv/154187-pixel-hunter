@@ -67,7 +67,7 @@ function startTimer() {
   updateHeader();
 
   timer = setInterval(() => {
-    if (gameModel.timeIsOver()) {
+    if (gameModel.isOverTime()) {
       stopGame();
       return;
     }

@@ -3,8 +3,8 @@ import {
   getTask,
   setCurrentTaskNumber,
   setTime,
-  taskIsExists,
-  answerIsRight,
+  isTaskExists,
+  isRightAnswer,
   determineAnswerSpeed,
   determineAnswerAsRight,
   determineAnswerAsWrong,
@@ -32,7 +32,7 @@ class GameModel {
     return this._state.livesCount > 0;
   }
 
-  timeIsOver() {
+  isOverTime() {
     return this._state.time >= this._state.timeLimit;
   }
 
@@ -40,8 +40,8 @@ class GameModel {
     this._state = setCurrentTaskNumber(this._state, this._state.currentTaskNumber + 1);
   }
 
-  nextTaskIsExists() {
-    return taskIsExists(this._state.currentTaskNumber + 1);
+  hasNextTask() {
+    return isTaskExists(this._state.currentTaskNumber + 1);
   }
 
   resetTime() {
@@ -53,7 +53,7 @@ class GameModel {
   }
 
   saveAnswer(answer) {
-    if (answerIsRight(this._state.currentTaskNumber, answer)) {
+    if (isRightAnswer(this._state.currentTaskNumber, answer)) {
       this._state = determineAnswerAsRight(this._state);
       this._state = determineAnswerSpeed(this._state);
     } else {

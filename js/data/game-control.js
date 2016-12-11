@@ -15,14 +15,14 @@ export const initialData = {
 };
 
 export const getTask = (taskNumber) => {
-  if (!taskIsExists(taskNumber)) {
+  if (!isTaskExists(taskNumber)) {
     throw new RangeError(`Task number ${taskNumber} does not exist`);
   }
 
   return tasks[taskNumber - 1];
 };
 
-export const taskIsExists = (taskNumber) => {
+export const isTaskExists = (taskNumber) => {
   if (isNaN(parseInt(taskNumber, 10))) {
     return false;
   }
@@ -57,7 +57,7 @@ export const setTime = (stateGame, time) => {
 };
 
 export const setCurrentTaskNumber = (stateGame, taskNumber) => {
-  if (!taskIsExists(taskNumber)) {
+  if (!isTaskExists(taskNumber)) {
     throw new RangeError(`Task number ${taskNumber} does not exist`);
   }
 
@@ -66,7 +66,7 @@ export const setCurrentTaskNumber = (stateGame, taskNumber) => {
   });
 };
 
-export const answerIsRight = (taskNumber, answer) => {
+export const isRightAnswer = (taskNumber, answer) => {
   const task = getTask(taskNumber);
 
   switch (task.type) {
@@ -99,10 +99,10 @@ export const determineAnswerAsWrong = (stateGame) => {
 export const determineAnswerSpeed = (stateGame) => {
   let speedName;
 
-  if (answerIsFast(stateGame.time)) {
+  if (isFastAnswer(stateGame.time)) {
     speedName = 'fast';
   }
-  if (answerIsSlow(stateGame.time)) {
+  if (isSlowAnswer(stateGame.time)) {
     speedName = 'slow';
   }
 
@@ -154,11 +154,11 @@ function getPointsByResultType(resultType) {
   }
 }
 
-function answerIsFast(time) {
+function isFastAnswer(time) {
   return time < gameSettings.timeLimitForFastAnswer;
 }
 
-function answerIsSlow(time) {
+function isSlowAnswer(time) {
   return time > gameSettings.timeLimitForSlowAnswer;
 }
 
