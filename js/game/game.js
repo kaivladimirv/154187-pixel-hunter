@@ -88,7 +88,7 @@ function startTask() {
 }
 
 function nextTask() {
-  if (!gameModel.hasLives() || !gameModel.nextTaskIsExists()) {
+  if (!(gameModel.hasLives() && gameModel.hasNextTask())) {
     endGame();
     return;
   }
