@@ -55,7 +55,7 @@ class GamePresenter {
   }
 
   _nextTask() {
-    if (!this._model.hasLives() || !this._model.hasNextTask()) {
+    if (!(this._model.hasLives() && this._model.hasNextTask())) {
       this.endGame();
       return;
     }
