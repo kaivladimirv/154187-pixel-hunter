@@ -1,6 +1,7 @@
 import AbstractView from '../abstract-view';
 import header from '../common/header-view';
 import ResultView from './result-view';
+import Application from '../application';
 
 class StatsView extends AbstractView {
   constructor(data) {
@@ -17,6 +18,18 @@ class StatsView extends AbstractView {
         <h1>${this._data.title}</h1>
         ${resultsList}
       </div>`;
+  }
+
+  bindHandlers() {
+    this._element.querySelector('.header__back').addEventListener('click', this.onClick);
+  }
+
+  clearHandlers() {
+    this._element.querySelector('.header__back').removeEventListener('click', this.onClick);
+  }
+
+  onClick() {
+    Application.showGame();
   }
 }
 
