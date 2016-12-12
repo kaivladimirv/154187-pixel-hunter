@@ -20,6 +20,10 @@ class GameModel {
     return this._state;
   }
 
+  reset() {
+    this._state = initialData;
+  }
+
   getTask() {
     return getTask(this._state.currentTaskNumber);
   }
