@@ -1,7 +1,5 @@
 import AbstractView from './abstract-view';
-import {renderElement} from './utils';
-import nextElement from './rules-view';
-import getData from './data/rules-data';
+import Application from './application';
 
 class GreetingView extends AbstractView {
   constructor(data) {
@@ -35,7 +33,7 @@ class GreetingView extends AbstractView {
   }
 
   onClick() {
-    renderElement(nextElement(getData()));
+    Application.showRules();
   }
 }
 

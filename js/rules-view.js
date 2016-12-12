@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view';
 import header from './common/header-view';
-import startGame from './game/game';
+import Application from './application';
 
 class RulesView extends AbstractView {
   constructor(data) {
@@ -46,7 +46,7 @@ class RulesView extends AbstractView {
   onClick(e) {
     e.preventDefault();
 
-    startGame();
+    Application.showGame();
   }
 
   onInput(e) {

@@ -1,5 +1,3 @@
-import {renderElement} from './utils';
-import introElement from './intro-view';
-import getData from './data/intro-data';
+import Application from './application';
 
-renderElement(introElement(getData()));
+Application.showWelcome();

@@ -1,7 +1,5 @@
 import AbstractView from './abstract-view';
-import {renderElement} from './utils';
-import nextElement from './greeting-view';
-import getData from './data/greeting-data';
+import Application from './application';
 
 class IntroView extends AbstractView {
   constructor(data) {
@@ -26,7 +24,7 @@ class IntroView extends AbstractView {
   }
 
   onClick() {
-    renderElement(nextElement(getData()));
+    Application.showGreeting();
   }
 }
 
