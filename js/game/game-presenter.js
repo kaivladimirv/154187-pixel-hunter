@@ -3,7 +3,7 @@ import HeaderView from './header-view';
 import TaskDoubleView from './task-double-view';
 import TaskWideView from './task-wide-view';
 import TaskTripleView from './task-triple-view';
-import gameModel from './game-model';
+import GameModel from './game-model';
 import getDataStats from '../data/stats-data';
 import Application from '../application';
 
@@ -136,6 +136,7 @@ class GamePresenter {
   }
 }
 
-const gamePresenter = new GamePresenter(gameModel);
-
-export default () => gamePresenter.startGame();
+export default (gameData) => {
+  const gamePresenter = new GamePresenter(new GameModel(gameData));
+  gamePresenter.startGame();
+};
