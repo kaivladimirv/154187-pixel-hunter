@@ -1,5 +1,7 @@
 import {mergeObjects, cloneObject} from '../utils';
-import {gameSettings, tasks, extraList} from './game-data';
+import {gameSettings, extraList} from './game-data';
+
+let tasks = [];
 
 export const initialData = {
   currentTaskNumber: 1,
@@ -10,8 +12,12 @@ export const initialData = {
   points: gameSettings.pointsPerRightAnswer,
   total: 0,
   totalFinal: 0,
-  stats: new Array(tasks.length).fill('unknown'),
+  stats: [],
   extra: {}
+};
+
+export const setData = (data) => {
+  tasks = data;
 };
 
 export const getTask = (taskNumber) => {
