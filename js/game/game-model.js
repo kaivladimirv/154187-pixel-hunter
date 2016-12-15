@@ -1,5 +1,6 @@
 import {
   initialData,
+  setData,
   getTask,
   setCurrentTaskNumber,
   setTime,
@@ -11,9 +12,10 @@ import {
   calculatePoints
 } from '../data/game-control';
 
-class GameModel {
-  constructor(state = initialData) {
+export default class GameModel {
+  constructor(gameData, state = initialData) {
     this._state = state;
+    setData(gameData);
   }
 
   get state() {
@@ -69,5 +71,3 @@ class GameModel {
     this._state = calculatePoints(this._state);
   }
 }
-
-export default new GameModel();
