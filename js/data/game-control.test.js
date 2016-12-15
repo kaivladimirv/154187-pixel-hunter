@@ -1,7 +1,8 @@
 import assert from 'assert';
-import {gameSettings} from './game-data';
+import {gameSettings, testTasks} from './game-data';
 import {
   initialData,
+  setData,
   isTaskExists,
   setCountLives,
   setTime,
@@ -13,6 +14,7 @@ import {
 } from './game-control';
 
 describe('Game', () => {
+  setData(testTasks);
 
   it('Task is not exists', () => {
     assert.equal(isTaskExists(100000), false);
