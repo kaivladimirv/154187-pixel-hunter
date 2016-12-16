@@ -17,15 +17,15 @@ export default class TaskTripleView extends AbstractView {
     let statsResult = new StatsResultView(this._dataStats);
     let content = `
       <form class="game__content  game__content--triple">
-        ${this._data.answers.map((value) => `
+        ${this._data.answers.map((value, index) => `
           <div class="game__option">
-            <img src="${value.image}" alt="${value.alt}" width="304" height="455">
+            <img src="${value.image.url}" alt="Option ${index + 1}" width="${value.image.width}" height="${value.image.height}">
           </div>`).join(' ')}
       </form>`;
 
     return `
       <div class="game">
-        <p class="game__task">${this._data.task}</p>
+        <p class="game__task">${this._data.question}</p>
         ${content}
         <div class="stats">
           ${statsResult.getMarkup()}

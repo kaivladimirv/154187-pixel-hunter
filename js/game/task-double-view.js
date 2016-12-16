@@ -1,5 +1,6 @@
 import AbstractView from '../abstract-view';
 import StatsResultView from '../common/stats-result-view';
+import {answerTypes} from '../data/game-data';
 
 export default class TaskDoubleView extends AbstractView {
   constructor(data, dataStats) {
@@ -17,15 +18,15 @@ export default class TaskDoubleView extends AbstractView {
     let statsResult = new StatsResultView(this._dataStats);
     let content = `
       <form class="game__content">
-        ${this._data.questions.map((value, index) => `
+        ${this._data.answers.map((value, index) => `
           <div class="game__option">
-            <img src="${value.image}" alt="${value.alt}" width="468" height="458">
+            <img src="${value.image.url}" alt="Option${index + 1}}" width="${value.image.width}" height="${value.image.height}">
             <label class="game__answer game__answer--photo">
-              <input name="question${index + 1}" type="radio" value="photo">
+              <input name="question${index + 1}" type="radio" value="${answerTypes.PHOTO}">
               <span>Фото</span>
             </label>
             <label class="game__answer game__answer--paint">
-              <input name="question${index + 1}" type="radio" value="paint">
+              <input name="question${index + 1}" type="radio" value="${answerTypes.PAINTING}">
               <span>Рисунок</span>
             </label>
           </div>`).join('')}
@@ -33,7 +34,7 @@ export default class TaskDoubleView extends AbstractView {
 
     return `
       <div class="game">
-        <p class="game__task">${this._data.task}</p>
+        <p class="game__task">${this._data.question}</p>
         ${content}
         <div class="stats">
           ${statsResult.getMarkup()}
