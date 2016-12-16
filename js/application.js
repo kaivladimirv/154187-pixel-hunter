@@ -4,9 +4,12 @@ import greetingElement from './greeting-view';
 import rulesElement from './rules-view';
 import startGame from './game/game-presenter';
 import showStats from './stats/stats-view';
+import errorElement from './error-view';
 import getIntroData from './data/intro-data';
 import getGreetingData from './data/greeting-data';
 import getRulesData from './data/rules-data';
+
+let gameData;
 
 export default class Application {
 
@@ -23,11 +26,18 @@ export default class Application {
   }
 
   static showGame() {
-    startGame();
+    startGame(gameData);
   }
 
   static showStats(data) {
     renderElement(showStats(data));
   }
 
+  static showError(data) {
+    renderElement(errorElement(data));
+  }
+
+  static set data(data) {
+    gameData = data;
+  }
 }
