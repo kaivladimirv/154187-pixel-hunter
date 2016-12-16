@@ -1,6 +1,7 @@
 import {
   initialData,
-  setData,
+  setTasksList,
+  getTasksCount,
   getTask,
   setCurrentTaskNumber,
   setTime,
@@ -13,9 +14,10 @@ import {
 } from '../data/game-control';
 
 export default class GameModel {
-  constructor(gameData, state = initialData) {
-    this._state = state;
-    setData(gameData);
+  constructor(gameData) {
+    setTasksList(gameData);
+
+    this.reset();
   }
 
   get state() {
@@ -24,6 +26,7 @@ export default class GameModel {
 
   reset() {
     this._state = initialData;
+    this._state.stats = new Array(getTasksCount()).fill('unknown');
   }
 
   getTask() {
