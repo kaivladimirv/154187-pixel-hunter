@@ -2,7 +2,7 @@ import assert from 'assert';
 import {gameSettings, testTasks} from './game-data';
 import {
   initialData,
-  setData,
+  setTasksList,
   isTaskExists,
   setCountLives,
   setTime,
@@ -14,7 +14,7 @@ import {
 } from './game-control';
 
 describe('Game', () => {
-  setData(testTasks);
+  setTasksList(testTasks);
 
   it('Task is not exists', () => {
     assert.equal(isTaskExists(100000), false);
@@ -32,7 +32,7 @@ describe('Game', () => {
   });
 
   describe('Get task', () => {
-    it('success: get data', () => assert.equal(getTask(1).taskNumber, 1));
+    it('success: get data', () => assert.equal(!!getTask(1).type, true));
     it('fail: get data', () => assert.throws(() => getTask(-1)));
   });
 
