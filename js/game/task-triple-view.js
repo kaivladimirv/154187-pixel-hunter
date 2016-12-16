@@ -20,7 +20,7 @@ export default class TaskTripleView extends AbstractView {
       <form class="game__content  game__content--triple">
         ${this._data.answers.map((value, index) => `
           <div class="game__option">
-            <img src="${value.image.url}" alt="Option ${index + 1}" width="${value.image.width}" height="${value.image.height}">
+            <img src="" alt="Option ${index + 1}" width="${value.image.width}" height="${value.image.height}">
           </div>`).join(' ')}
       </form>`;
 

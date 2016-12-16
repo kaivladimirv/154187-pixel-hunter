@@ -20,7 +20,7 @@ export default class TaskDoubleView extends AbstractView {
     let content = `
       <form class="game__content  game__content--wide">
         <div class="game__option">
-          <img src="${this._data.answers[0].image.url}" alt="Option 1" 
+          <img src="" alt="Option 1" 
             width="${this._data.answers[0].image.width}" height="${this._data.answers[0].image.height}">
           <label class="game__answer  game__answer--photo">
             <input name="question1" type="radio" value="${answerTypes.PHOTO}">
