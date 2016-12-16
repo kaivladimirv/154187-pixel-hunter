@@ -1,5 +1,5 @@
 import {mergeObjects, cloneObject} from '../utils';
-import {gameSettings, extraList} from './game-data';
+import {gameSettings, extraList, taskTypes, answerTypes} from './game-data';
 
 let tasks = [];
 
@@ -16,9 +16,11 @@ export const initialData = {
   extra: {}
 };
 
-export const setData = (data) => {
+export const setTasksList = (data) => {
   tasks = data;
 };
+
+export const getTasksCount = () => tasks.length;
 
 export const getTask = (taskNumber) => {
   if (!isTaskExists(taskNumber)) {
@@ -76,18 +78,18 @@ export const isRightAnswer = (taskNumber, answer) => {
   const task = getTask(taskNumber);
 
   switch (task.type) {
-    case 'double':
-      if (task.questions.length !== answer.length) {
+    case taskTypes.TWO_OF_TWO:
+      if (task.answers.length !== answer.length) {
         return false;
       }
 
-      return answer.filter((value, index) => task.questions[index].type === value).length === answer.length;
+      return answer.filter((value, index) => task.answers[index].type === value).length === answer.length;
 
-    case 'wide':
-      return (answer && (answer === task.question.type));
+    case taskTypes.TINDER_LIKE:
+      return (answer && (answer === task.answers[0].type));
 
-    case 'triple':
-      return (Number.isInteger(answer) && task.answers[answer].type === 'paint');
+    case taskTypes.ONE_OF_THREE:
+      return (Number.isInteger(answer) && task.answers[answer].type === answerTypes.PAINTING);
 
     default:
       throw new Error(`Unknown type task ${task.type}`);
