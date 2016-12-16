@@ -1,5 +1,6 @@
 import AbstractView from '../abstract-view';
 import StatsResultView from '../common/stats-result-view';
+import {loadImages} from '../utils';
 
 export default class TaskTripleView extends AbstractView {
   constructor(data, dataStats) {
@@ -34,6 +35,8 @@ export default class TaskTripleView extends AbstractView {
   }
 
   bindHandlers() {
+    loadImages(this._element.querySelectorAll('.game__content img'), this._data.answers);
+
     this.onClick = this.onClick.bind(this);
     this._element.querySelector('.game').addEventListener('click', this.onClick);
   }
