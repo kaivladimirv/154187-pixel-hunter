@@ -1,5 +1,7 @@
 import AbstractView from '../abstract-view';
 import StatsResultView from '../common/stats-result-view';
+import {answerTypes} from '../data/game-data';
+import {loadImages} from '../utils';
 
 export default class TaskDoubleView extends AbstractView {
   constructor(data, dataStats) {
@@ -18,13 +20,13 @@ export default class TaskDoubleView extends AbstractView {
     let content = `
       <form class="game__content  game__content--wide">
         <div class="game__option">
-          <img src="${this._data.question.image}" alt="${this._data.question.alt}" width="705" height="455">
+          <img src="" alt="Option 1" width="705" height="455">
           <label class="game__answer  game__answer--photo">
-            <input name="question1" type="radio" value="photo">
+            <input name="question1" type="radio" value="${answerTypes.PHOTO}">
             <span>Фото</span>
           </label>
           <label class="game__answer  game__answer--wide  game__answer--paint">
-            <input name="question1" type="radio" value="paint">
+            <input name="question1" type="radio" value="${answerTypes.PAINTING}">
             <span>Рисунок</span>
           </label>
         </div>
@@ -32,7 +34,7 @@ export default class TaskDoubleView extends AbstractView {
 
     return `
       <div class="game">
-        <p class="game__task">${this._data.task}</p>
+        <p class="game__task">${this._data.question}</p>
         ${content}
         <div class="stats">
           ${statsResult.getMarkup()}
@@ -41,6 +43,8 @@ export default class TaskDoubleView extends AbstractView {
   }
 
   bindHandlers() {
+    loadImages(this._element.querySelectorAll('.game__content img'), this._data.answers);
+
     this.onClick = this.onClick.bind(this);
     this._element.querySelector('.game').addEventListener('click', this.onClick);
   }

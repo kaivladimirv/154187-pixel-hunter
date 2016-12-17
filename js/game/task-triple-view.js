@@ -1,5 +1,6 @@
 import AbstractView from '../abstract-view';
 import StatsResultView from '../common/stats-result-view';
+import {loadImages} from '../utils';
 
 export default class TaskTripleView extends AbstractView {
   constructor(data, dataStats) {
@@ -17,15 +18,15 @@ export default class TaskTripleView extends AbstractView {
     let statsResult = new StatsResultView(this._dataStats);
     let content = `
       <form class="game__content  game__content--triple">
-        ${this._data.answers.map((value) => `
+        ${this._data.answers.map((value, index) => `
           <div class="game__option">
-            <img src="${value.image}" alt="${value.alt}" width="304" height="455">
+            <img src="" alt="Option ${index + 1}" width="304" height="455">
           </div>`).join(' ')}
       </form>`;
 
     return `
       <div class="game">
-        <p class="game__task">${this._data.task}</p>
+        <p class="game__task">${this._data.question}</p>
         ${content}
         <div class="stats">
           ${statsResult.getMarkup()}
@@ -34,6 +35,8 @@ export default class TaskTripleView extends AbstractView {
   }
 
   bindHandlers() {
+    loadImages(this._element.querySelectorAll('.game__content img'), this._data.answers);
+
     this.onClick = this.onClick.bind(this);
     this._element.querySelector('.game').addEventListener('click', this.onClick);
   }

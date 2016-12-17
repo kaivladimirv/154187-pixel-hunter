@@ -3,7 +3,8 @@ import HeaderView from './header-view';
 import TaskDoubleView from './task-double-view';
 import TaskWideView from './task-wide-view';
 import TaskTripleView from './task-triple-view';
-import gameModel from './game-model';
+import GameModel from './game-model';
+import {taskTypes} from '../data/game-data';
 import getDataStats from '../data/stats-data';
 import Application from '../application';
 
@@ -108,15 +109,15 @@ class GamePresenter {
     let task = this._model.getTask();
 
     switch (task.type) {
-      case 'double':
+      case taskTypes.TWO_OF_TWO:
         taskContent = new TaskDoubleView(task, this._model.getStats());
         break;
 
-      case 'wide':
+      case taskTypes.TINDER_LIKE:
         taskContent = new TaskWideView(task, this._model.getStats());
         break;
 
-      case 'triple':
+      case taskTypes.ONE_OF_THREE:
         taskContent = new TaskTripleView(task, this._model.getStats());
         break;
 
@@ -136,6 +137,7 @@ class GamePresenter {
   }
 }
 
-const gamePresenter = new GamePresenter(gameModel);
-
-export default () => gamePresenter.startGame();
+export default (gameData) => {
+  const gamePresenter = new GamePresenter(new GameModel(gameData));
+  gamePresenter.startGame();
+};
