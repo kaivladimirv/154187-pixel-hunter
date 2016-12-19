@@ -1,9 +1,10 @@
 import {mergeObjects, cloneObject} from '../utils';
-import {gameSettings, extraList, taskTypes, answerTypes} from './game-data';
+import {gameSettings, extraList, taskTypes, answerTypes, resultTypes} from './game-data';
 
 let tasks = [];
 
 export const initialData = {
+  userName: '',
   currentTaskNumber: 1,
   livesCount: gameSettings.maxLives,
   maxLives: gameSettings.maxLives,
@@ -13,7 +14,13 @@ export const initialData = {
   total: 0,
   totalFinal: 0,
   stats: [],
-  extra: {}
+  extra: []
+};
+
+export const setUserName = (stateGame, userName) => {
+  return Object.assign({}, stateGame, {
+    userName: userName
+  });
 };
 
 export const setTasksList = (data) => {
@@ -96,49 +103,57 @@ export const isRightAnswer = (taskNumber, answer) => {
   }
 };
 
-export const determineAnswerAsRight = (stateGame) => setStatus(stateGame, 'correct');
+export const determineAnswerAsRight = (stateGame) => setStatus(stateGame, resultTypes.CORRECT);
 
 export const determineAnswerAsWrong = (stateGame) => {
   let newStateGame = setCountLives(stateGame, stateGame.livesCount - 1);
 
-  return setStatus(newStateGame, 'wrong');
+  return setStatus(newStateGame, resultTypes.WRONG);
 };
 
 export const determineAnswerSpeed = (stateGame) => {
   let speedName;
 
   if (isFastAnswer(stateGame.time)) {
-    speedName = 'fast';
+    speedName = resultTypes.FAST;
   }
   if (isSlowAnswer(stateGame.time)) {
-    speedName = 'slow';
+    speedName = resultTypes.SLOW;
   }
 
   if (!speedName) {
     return stateGame;
   }
 
-  let newStateGame = setStatus(stateGame, speedName);
-  return addPointsToExtraStats(newStateGame, speedName, 1);
+  return setStatus(stateGame, speedName);
 };
 
 export const calculatePoints = (stateGame) => {
-  const countCorrect = getCountAnswersByResultType(stateGame, 'correct');
-  const countFast = getCountAnswersByResultType(stateGame, 'fast');
-  const countSlow = getCountAnswersByResultType(stateGame, 'slow');
+  const countCorrect = getCountAnswersByResultType(stateGame, resultTypes.CORRECT);
+  const countFast = getCountAnswersByResultType(stateGame, resultTypes.FAST);
+  const countSlow = getCountAnswersByResultType(stateGame, resultTypes.SLOW);
 
-  const bonusPerFast = countFast * getPointsByResultType('fast');
-  const bonusPerLives = stateGame.livesCount * gameSettings.pointsPerEachLife;
-  const penaltyPerSlow = countSlow * getPointsByResultType('slow');
+  const bonusPerFast = countFast * getPointsByResultType(resultTypes.FAST);
+  const bonusPerLives = stateGame.lives * gameSettings.pointsPerEachLife;
+  const penaltyPerSlow = countSlow * getPointsByResultType(resultTypes.SLOW);
 
-  const total = (countCorrect + countFast + countSlow) * getPointsByResultType('correct');
+  const total = (countCorrect + countFast + countSlow) * getPointsByResultType(resultTypes.CORRECT);
+
+  stateGame.points = gameSettings.pointsPerRightAnswer;
 
   let newStateGame = cloneObject(stateGame);
   if (bonusPerLives) {
-    newStateGame = addPointsToExtraStats(newStateGame, 'heart', newStateGame.livesCount);
+    newStateGame = addPointsToExtraStats(newStateGame, 'heart', stateGame.lives);
   }
+  if (bonusPerFast) {
+    newStateGame = addPointsToExtraStats(newStateGame, resultTypes.FAST, countFast);
+  }
+  if (penaltyPerSlow) {
+    newStateGame = addPointsToExtraStats(newStateGame, resultTypes.SLOW, countSlow);
+  }
+
   newStateGame.total = total;
-  newStateGame.totalFinal = total + bonusPerFast + bonusPerLives - penaltyPerSlow;
+  newStateGame.totalFinal = total + bonusPerFast + bonusPerLives + penaltyPerSlow;
 
   return newStateGame;
 };
@@ -149,11 +164,11 @@ function getCountAnswersByResultType(stateGame, resultType) {
 
 function getPointsByResultType(resultType) {
   switch (resultType) {
-    case 'correct':
+    case resultTypes.CORRECT:
       return gameSettings.pointsPerRightAnswer;
 
-    case 'fast':
-    case 'slow':
+    case resultTypes.FAST:
+    case resultTypes.SLOW:
     case 'heart':
       return extraList[resultType].points;
 
@@ -185,22 +200,19 @@ function setStatus(stateGame, statusName) {
 }
 
 function addPointsToExtraStats(stateGame, name, value) {
-  const initialValue = {
-    name: name,
-    title: extraList[name].title,
-    value: 0,
-    points: extraList[name].points,
-    total: 0,
-  };
-
-  let extra = Object.assign({}, stateGame.extra);
-
-  if (!extra[name]) {
-    extra[name] = initialValue;
+  if (!stateGame.extra) {
+    stateGame.extra = [];
   }
 
-  extra[name].value += value;
-  extra[name].total = extra[name].value * extra[name].points;
+  let extra = [...stateGame.extra];
+
+  extra.push({
+    name: name,
+    title: extraList[name].title,
+    value: value,
+    points: Math.abs(extraList[name].points),
+    total: value * extraList[name].points,
+  });
 
   return mergeObjects(stateGame, {
     extra: extra
