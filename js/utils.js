@@ -37,3 +37,19 @@ export const loadImages = (images, data) => {
     index++;
   }
 };
+
+export const validationStatusForGetRequest = (response) => {
+  if (response.status >= 200 && response.status < 300) {
+    return response;
+  } else {
+    throw new Error(`${response.status}: ${response.statusText}`);
+  }
+};
+
+export const validationStatusForPostRequest = (response) => {
+  if ((response.status >= 200 && response.status < 300) || (response.status === 400)) {
+    return response;
+  } else {
+    throw new Error(`${response.status}: ${response.statusText}`);
+  }
+};
