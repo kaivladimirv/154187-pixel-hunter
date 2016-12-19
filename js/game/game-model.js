@@ -1,5 +1,8 @@
+import 'whatwg-fetch';
+import {validationStatusForGetRequest, validationStatusForPostRequest} from '../utils';
 import {
   initialData,
+  setUserName,
   setTasksList,
   getTasksCount,
   getTask,
@@ -12,9 +15,12 @@ import {
   determineAnswerAsWrong,
   calculatePoints
 } from '../data/game-control';
+import Application from '../application';
 
 export default class GameModel {
-  constructor(gameData) {
+  constructor(userName, gameData) {
+    this._userName = userName;
+
     setTasksList(gameData);
 
     this.reset();
@@ -27,6 +33,7 @@ export default class GameModel {
   reset() {
     this._state = initialData;
     this._state.stats = new Array(getTasksCount()).fill('unknown');
+    this._state = setUserName(this._state, this._userName);
   }
 
   getTask() {
@@ -70,7 +77,32 @@ export default class GameModel {
     }
   }
 
-  calcResult() {
+  saveResult() {
     this._state = calculatePoints(this._state);
+
+    const requestBody = JSON.stringify({
+      stats: this._state.stats,
+      lives: this._state.livesCount
+    });
+
+    return window.fetch(Application.severUrl + 'pixel-hunter/stats/' + this._state.userName,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        mode: 'cors',
+        body: requestBody
+      })
+        .then(validationStatusForPostRequest);
+  }
+
+  getHistoryResults() {
+    return window.fetch(Application.severUrl + 'pixel-hunter/stats/' + this._state.userName)
+        .then(validationStatusForGetRequest)
+        .then((response) => response.json())
+        .then((historyResults) => {
+          return historyResults.map((value) => calculatePoints(value));
+        });
   }
 }

@@ -8,6 +8,7 @@ class RulesView extends AbstractView {
     this._data = data;
     this._btnRulesSubmit = null;
     this._inputRules = null;
+    this._headerBack = null;
   }
 
   getMarkup() {
@@ -30,8 +31,12 @@ class RulesView extends AbstractView {
   }
 
   bindHandlers() {
+    this.onClick = this.onClick.bind(this);
     this._btnRulesSubmit = this._element.querySelector('.rules__button');
     this._btnRulesSubmit.addEventListener('click', this.onClick);
+
+    this._headerBack = this._element.querySelector('.header__back');
+    this._headerBack.addEventListener('click', this.onBackClick);
 
     this.onInput = this.onInput.bind(this);
     this._inputRules = this._element.querySelector('.rules__input');
@@ -46,7 +51,7 @@ class RulesView extends AbstractView {
   onClick(e) {
     e.preventDefault();
 
-    Application.showGame();
+    Application.showGame(this._inputRules.value);
   }
 
   onInput(e) {
@@ -56,7 +61,10 @@ class RulesView extends AbstractView {
       this._btnRulesSubmit.setAttribute('disabled', '');
     }
   }
+
+  onBackClick() {
+    Application.showWelcome();
+  }
 }
 
 export default (data) => new RulesView(data).element;
-

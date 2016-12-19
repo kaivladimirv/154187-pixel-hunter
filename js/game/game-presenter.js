@@ -5,7 +5,7 @@ import TaskWideView from './task-wide-view';
 import TaskTripleView from './task-triple-view';
 import GameModel from './game-model';
 import {taskTypes} from '../data/game-data';
-import getDataStats from '../data/stats-data';
+import dataStats from '../data/stats-data';
 import Application from '../application';
 
 class GamePresenter {
@@ -44,9 +44,33 @@ class GamePresenter {
   }
 
   endGame() {
-    this._model.calcResult();
+    this._saveResult().then(() => {
+      this._getHistoryResults().then((history) => {
+        Application.showStats(dataStats, history);
+      });
+    });
+  }
 
-    Application.showStats(getDataStats());
+  _saveResult() {
+    Application.showLoading({title: 'Сохранение результатов игры...', description: ''});
+
+    return this._model.saveResult().catch((errorText) => {
+      Application.showError({
+        title: 'Ошибка сохранения результатов игры',
+        description: errorText
+      });
+    });
+  }
+
+  _getHistoryResults() {
+    Application.showLoading({title: 'Загрузка истории...', description: ''});
+
+    return this._model.getHistoryResults().catch((errorText) => {
+      Application.showError({
+        title: 'Произошла ошибка при получении истории результатов!',
+        description: errorText
+      });
+    });
   }
 
   _startTask() {
@@ -94,7 +118,10 @@ class GamePresenter {
   }
 
   _createHeader() {
-    return new HeaderView(this._model.state).element;
+    let header = new HeaderView(this._model.state);
+    header.onBack = this._stopTimer.bind(this);
+
+    return header.element;
   }
 
   _updateHeader() {
@@ -137,7 +164,7 @@ class GamePresenter {
   }
 }
 
-export default (gameData) => {
-  const gamePresenter = new GamePresenter(new GameModel(gameData));
+export default (userName, gameData) => {
+  const gamePresenter = new GamePresenter(new GameModel(userName, gameData));
   gamePresenter.startGame();
 };

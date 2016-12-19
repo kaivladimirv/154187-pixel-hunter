@@ -3,16 +3,17 @@ import ResultExtraView from './result-extra-view';
 import StatsResultView from '../common/stats-result-view';
 
 export default class ResultView extends AbstractView {
-  constructor(data) {
+  constructor(data, index) {
     super();
     this._data = data;
+    this._index = index;
   }
 
   getMarkup() {
     return `
       <table class="result__table">
-        ${(this._data.status === 'success') ? this._getMarkupResultSuccess() : ''}
-        ${(this._data.status === 'fail') ? this._getMarkupResultFail() : ''}
+        ${(this._data.lives > 0) ? this._getMarkupResultSuccess() : ''}
+        ${(this._data.lives === 0) ? this._getMarkupResultFail() : ''}
       </table>`;
   }
 
@@ -21,7 +22,7 @@ export default class ResultView extends AbstractView {
 
     return `
       <tr>
-        <td class="result__number">${this._data.taskNumber}.</td>
+        <td class="result__number">${this._index}.</td>
         <td>
           ${statsResult.getMarkup()}
         </td>
@@ -36,14 +37,14 @@ export default class ResultView extends AbstractView {
 
     return `
       <tr>
-        <td class="result__number">${this._data.taskNumber}.</td>
+        <td class="result__number">${this._index}.</td>
         <td colspan="2">
           ${statsResult.getMarkup()}
         </td>
         <td class="result__points">×&nbsp;${this._data.points}</td>
         <td class="result__total">${this._data.total}</td>
       </tr>
-      ${resultExtra.getMarkup()}
+      ${resultExtra.getMarkup()}  
       <tr>
         <td colspan="5" class="result__total  result__total--final">${this._data.totalFinal}</td>
       </tr>`;
