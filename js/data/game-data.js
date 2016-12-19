@@ -241,7 +241,7 @@ export const extraList = {
   },
   'slow': {
     title: 'Штраф за медлительност',
-    points: 50
+    points: -50
   }
 };
 
@@ -254,4 +254,11 @@ export const taskTypes = {
 export const answerTypes = {
   PAINTING: 'painting',
   PHOTO: 'photo'
+};
+
+export const resultTypes = {
+  CORRECT: 'correct',
+  WRONG: 'wrong',
+  FAST: 'fast',
+  SLOW: 'slow'
 };
