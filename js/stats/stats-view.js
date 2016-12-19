@@ -4,13 +4,14 @@ import ResultView from './result-view';
 import Application from '../application';
 
 class StatsView extends AbstractView {
-  constructor(data) {
+  constructor(data, history) {
     super();
     this._data = data;
+    this._history = history;
   }
 
   getMarkup() {
-    let resultsList = this._data.results.map((value) => new ResultView(value).getMarkup()).join(' ');
+    let resultsList = this._history.map((value, index) => new ResultView(value, index + 1).getMarkup()).join(' ');
 
     return `
       ${header.getMarkup()}
@@ -29,8 +30,8 @@ class StatsView extends AbstractView {
   }
 
   onClick() {
-    Application.showGame();
+    Application.showWelcome();
   }
 }
 
-export default (data) => new StatsView(data).element;
+export default (data, history) => new StatsView(data, history).element;
