@@ -1,10 +1,12 @@
 import AbstractView from '../abstract-view';
 import LivesView from './lives-view';
+import Application from '../application';
 
 export default class HeaderView extends AbstractView {
   constructor(data) {
     super();
     this._data = data;
+    this._onBack = null;
   }
 
   getMarkup() {
@@ -21,5 +23,23 @@ export default class HeaderView extends AbstractView {
         <h1 class="game__timer">${this._data.time}</h1>
         ${lives.getMarkup()}
       </header>`;
+  }
+
+  bindHandlers() {
+    this.onClick = this.onClick.bind(this);
+    this._element.querySelector('.header__back').addEventListener('click', this.onClick);
+  }
+
+  clearHandlers() {
+    this._element.querySelector('.header__back').removeEventListener('click', this.onClick);
+  }
+
+  onClick() {
+    this._onBack();
+    Application.showWelcome();
+  }
+
+  set onBack(handler) {
+    this._onBack = handler;
   }
 }
