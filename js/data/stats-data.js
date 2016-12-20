@@ -1,3 +1,3 @@
 export default {
-  title: 'Победа!'
+  title: 'Победы и неудачи'
 };
