@@ -7,6 +7,7 @@ export default class HeaderView extends AbstractView {
     super();
     this._data = data;
     this._onBack = null;
+    this._headerBack = null;
   }
 
   set onBack(handler) {
@@ -31,11 +32,12 @@ export default class HeaderView extends AbstractView {
 
   bindHandlers() {
     this._onClick = this._onClick.bind(this);
-    this._element.querySelector('.header__back').addEventListener('click', this._onClick);
+    this._headerBack = this._element.querySelector('.header__back');
+    this._headerBack.addEventListener('click', this._onClick);
   }
 
   clearHandlers() {
-    this._element.querySelector('.header__back').removeEventListener('click', this._onClick);
+    this._headerBack.removeEventListener('click', this._onClick);
   }
 
   _onClick() {
@@ -48,5 +50,6 @@ export default class HeaderView extends AbstractView {
     super.destroy();
     this._data = null;
     this._onBack = null;
+    this._headerBack = null;
   }
 }

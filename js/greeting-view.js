@@ -5,6 +5,7 @@ class GreetingView extends AbstractView {
   constructor(data) {
     super();
     this._data = data;
+    this._btn = null;
   }
 
   getMarkup() {
@@ -26,11 +27,12 @@ class GreetingView extends AbstractView {
 
   bindHandlers() {
     this._onClick = this._onClick.bind(this);
-    this._element.querySelector('.greeting__continue').addEventListener('click', this._onClick);
+    this._btn = this._element.querySelector('.greeting__continue');
+    this._btn.addEventListener('click', this._onClick);
   }
 
   clearHandlers() {
-    this._element.querySelector('.greeting__continue').removeEventListener('click', this._onClick);
+    this._btn.removeEventListener('click', this._onClick);
   }
 
   _onClick() {
@@ -41,8 +43,8 @@ class GreetingView extends AbstractView {
   destroy() {
     super.destroy();
     this._data = null;
+    this._btn = null;
   }
 }
 
 export default (data) => new GreetingView(data).element;
-

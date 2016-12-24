@@ -8,6 +8,7 @@ class StatsView extends AbstractView {
     super();
     this._data = data;
     this._history = history;
+    this._headerBack = null;
   }
 
   getMarkup() {
@@ -23,11 +24,12 @@ class StatsView extends AbstractView {
 
   bindHandlers() {
     this._onClick = this._onClick.bind(this);
-    this._element.querySelector('.header__back').addEventListener('click', this._onClick);
+    this._headerBack = this._element.querySelector('.header__back');
+    this._headerBack.addEventListener('click', this._onClick);
   }
 
   clearHandlers() {
-    this._element.querySelector('.header__back').removeEventListener('click', this._onClick);
+    this._headerBack.removeEventListener('click', this._onClick);
   }
 
   _onClick() {
@@ -39,6 +41,7 @@ class StatsView extends AbstractView {
     super.destroy();
     this._data = null;
     this._history = null;
+    this._headerBack = null;
   }
 }
 

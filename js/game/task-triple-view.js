@@ -8,6 +8,7 @@ export default class TaskTripleView extends AbstractView {
     this._data = data;
     this._dataStats = dataStats;
     this._onAnswer = null;
+    this._clickablElement = null;
   }
 
   set onAnswer(handler) {
@@ -38,11 +39,12 @@ export default class TaskTripleView extends AbstractView {
     loadImages(this._element.querySelectorAll('.game__content img'), this._data.answers);
 
     this._onClick = this._onClick.bind(this);
-    this._element.querySelector('.game').addEventListener('click', this._onClick);
+    this._clickablElement = this._element.querySelector('.game');
+    this._clickablElement.addEventListener('click', this._onClick);
   }
 
   clearHandlers() {
-    this._element.querySelector('.game').removeEventListener('click', this._onClick);
+    this._clickablElement.removeEventListener('click', this._onClick);
   }
 
   _onClick(e) {
@@ -79,5 +81,6 @@ export default class TaskTripleView extends AbstractView {
     this._data = null;
     this._dataStats = null;
     this._onAnswer = null;
+    this._clickablElement = null;
   }
 }
