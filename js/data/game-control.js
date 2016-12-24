@@ -96,7 +96,7 @@ export const isRightAnswer = (taskNumber, answer) => {
       return (answer && (answer === task.answers[0].type));
 
     case taskTypes.ONE_OF_THREE:
-      return (Number.isInteger(answer) && task.answers[answer].type === answerTypes.PAINTING);
+      return (!isNaN(parseInt(answer, 10)) && task.answers[answer].type === answerTypes.PAINTING);
 
     default:
       throw new Error(`Unknown type task ${task.type}`);
