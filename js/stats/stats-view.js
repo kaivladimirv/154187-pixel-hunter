@@ -22,14 +22,14 @@ class StatsView extends AbstractView {
   }
 
   bindHandlers() {
-    this._element.querySelector('.header__back').addEventListener('click', this.onClick);
+    this._element.querySelector('.header__back').addEventListener('click', this._onClick);
   }
 
   clearHandlers() {
-    this._element.querySelector('.header__back').removeEventListener('click', this.onClick);
+    this._element.querySelector('.header__back').removeEventListener('click', this._onClick);
   }
 
-  onClick() {
+  _onClick() {
     Application.showWelcome();
   }
 }

@@ -14,6 +14,14 @@ let gameData;
 
 export default class Application {
 
+  static get severUrl() {
+    return 'https://intensive-ecmascript-server-nnpnvhhedl.now.sh/';
+  }
+
+  static set data(data) {
+    gameData = data;
+  }
+
   static showWelcome() {
     renderElement(introElement(getIntroData()));
   }
@@ -42,11 +50,4 @@ export default class Application {
     renderElement(loadingElement(data));
   }
 
-  static set data(data) {
-    gameData = data;
-  }
-
-  static get severUrl() {
-    return 'https://intensive-ecmascript-server-nnpnvhhedl.now.sh/';
-  }
 }

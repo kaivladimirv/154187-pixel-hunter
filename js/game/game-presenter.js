@@ -17,18 +17,6 @@ class GamePresenter {
     this._model = model;
   }
 
-  _createScreenGame() {
-    let screenGame = createElementFromTemplate('');
-
-    this._header = this._createHeader();
-    screenGame.appendChild(this._header);
-
-    this._content = this._getContentGame();
-    screenGame.appendChild(this._content);
-
-    renderElement(screenGame);
-  }
-
   startGame() {
     this._model.reset();
     this._createScreenGame();
@@ -49,6 +37,14 @@ class GamePresenter {
         Application.showStats(dataStats, history);
       });
     });
+  }
+
+  _onAnswer(answer) {
+    this._stopTimer();
+
+    this._model.saveAnswer(answer);
+
+    this._nextTask();
   }
 
   _saveResult() {
@@ -109,12 +105,16 @@ class GamePresenter {
     clearInterval(this._timer);
   }
 
-  _onAnswer(answer) {
-    this._stopTimer();
+  _createScreenGame() {
+    let screenGame = createElementFromTemplate('');
 
-    this._model.saveAnswer(answer);
+    this._header = this._createHeader();
+    screenGame.appendChild(this._header);
 
-    this._nextTask();
+    this._content = this._getContentGame();
+    screenGame.appendChild(this._content);
+
+    renderElement(screenGame);
   }
 
   _createHeader() {

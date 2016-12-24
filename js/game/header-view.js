@@ -9,6 +9,10 @@ export default class HeaderView extends AbstractView {
     this._onBack = null;
   }
 
+  set onBack(handler) {
+    this._onBack = handler;
+  }
+
   getMarkup() {
     let lives = new LivesView(this._data.livesCount, this._data.maxLives);
 
@@ -26,20 +30,16 @@ export default class HeaderView extends AbstractView {
   }
 
   bindHandlers() {
-    this.onClick = this.onClick.bind(this);
-    this._element.querySelector('.header__back').addEventListener('click', this.onClick);
+    this._onClick = this._onClick.bind(this);
+    this._element.querySelector('.header__back').addEventListener('click', this._onClick);
   }
 
   clearHandlers() {
-    this._element.querySelector('.header__back').removeEventListener('click', this.onClick);
+    this._element.querySelector('.header__back').removeEventListener('click', this._onClick);
   }
 
-  onClick() {
+  _onClick() {
     this._onBack();
     Application.showWelcome();
-  }
-
-  set onBack(handler) {
-    this._onBack = handler;
   }
 }

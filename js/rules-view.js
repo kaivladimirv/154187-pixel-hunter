@@ -31,30 +31,31 @@ class RulesView extends AbstractView {
   }
 
   bindHandlers() {
-    this.onClick = this.onClick.bind(this);
+    this._onClick = this._onClick.bind(this);
     this._btnRulesSubmit = this._element.querySelector('.rules__button');
-    this._btnRulesSubmit.addEventListener('click', this.onClick);
+    this._btnRulesSubmit.addEventListener('click', this._onClick);
 
     this._headerBack = this._element.querySelector('.header__back');
-    this._headerBack.addEventListener('click', this.onBackClick);
+    this._headerBack.addEventListener('click', this._onBackClick);
 
-    this.onInput = this.onInput.bind(this);
+    this._onInput = this._onInput.bind(this);
     this._inputRules = this._element.querySelector('.rules__input');
-    this._inputRules.addEventListener('input', this.onInput);
+    this._inputRules.addEventListener('input', this._onInput);
   }
 
   clearHandlers() {
-    this._btnRulesSubmit.removeEventListener('click', this.onClick);
-    this._inputRules.removeEventListener('input', this.onInput);
+    this._btnRulesSubmit.removeEventListener('click', this._onClick);
+    this._headerBack.removeEventListener('click', this._onBackClick);
+    this._inputRules.removeEventListener('input', this._onInput);
   }
 
-  onClick(e) {
+  _onClick(e) {
     e.preventDefault();
 
     Application.showGame(this._inputRules.value);
   }
 
-  onInput(e) {
+  _onInput(e) {
     if (e.target.value) {
       this._btnRulesSubmit.removeAttribute('disabled');
     } else {
@@ -62,7 +63,7 @@ class RulesView extends AbstractView {
     }
   }
 
-  onBackClick() {
+  _onBackClick() {
     Application.showWelcome();
   }
 }

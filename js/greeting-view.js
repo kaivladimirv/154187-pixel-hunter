@@ -25,14 +25,14 @@ class GreetingView extends AbstractView {
   }
 
   bindHandlers() {
-    this._element.querySelector('.greeting__continue').addEventListener('click', this.onClick);
+    this._element.querySelector('.greeting__continue').addEventListener('click', this._onClick);
   }
 
   clearHandlers() {
-    this._element.querySelector('.greeting__continue').removeEventListener('click', this.onClick);
+    this._element.querySelector('.greeting__continue').removeEventListener('click', this._onClick);
   }
 
-  onClick() {
+  _onClick() {
     Application.showRules();
   }
 }

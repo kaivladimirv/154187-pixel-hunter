@@ -37,15 +37,15 @@ export default class TaskTripleView extends AbstractView {
   bindHandlers() {
     loadImages(this._element.querySelectorAll('.game__content img'), this._data.answers);
 
-    this.onClick = this.onClick.bind(this);
-    this._element.querySelector('.game').addEventListener('click', this.onClick);
+    this._onClick = this._onClick.bind(this);
+    this._element.querySelector('.game').addEventListener('click', this._onClick);
   }
 
   clearHandlers() {
-    this._element.querySelector('.game').removeEventListener('click', this.onClick);
+    this._element.querySelector('.game').removeEventListener('click', this._onClick);
   }
 
-  onClick(e) {
+  _onClick(e) {
     if (!e.target.classList.contains('game__option')) {
       return;
     }
