@@ -1,6 +1,8 @@
 import 'whatwg-fetch';
-import {validationStatusForGetRequest} from './utils';
+import {initPromisePolyfill, validationStatusForGetRequest} from './utils';
 import Application from './application';
+
+initPromisePolyfill();
 
 Application.showLoading({title: 'Подождите. Идёт загрузка...', description: ''});
 

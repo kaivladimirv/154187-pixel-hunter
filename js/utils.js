@@ -1,3 +1,4 @@
+import Promise from 'promise-polyfill';
 import imageLoader from './image-loader/image-loader';
 
 let mainElement;
@@ -17,7 +18,30 @@ export const createElementFromTemplate = (template) => {
   return node;
 };
 
-export const mergeObjects = (...objects) => Object.assign({}, ...objects);
+export const mergeObjects = (...objects) => {
+  let to = {};
+
+  objects.forEach((value) => {
+    to = mergeObject(to, value);
+  });
+
+  return to;
+};
+
+function mergeObject(target, source) {
+  if (!target) {
+    throw new TypeError('Cannot convert first argument to object');
+  }
+
+  let to = Object(target);
+  let keysArray = Object.keys(Object(source));
+  for (let nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+    let nextKey = keysArray[nextIndex];
+    to[nextKey] = source[nextKey];
+  }
+
+  return to;
+}
 
 export const cloneObject = (object) => JSON.parse(JSON.stringify(object));
 
@@ -26,16 +50,13 @@ export const loadImages = (images, data) => {
     return;
   }
 
-  let index = 0;
-  for (let image of images) {
+  [].forEach.call(images, (image, index) => {
     imageLoader(image).load({
       url: data[index].image.url,
       width: data[index].image.width,
       height: data[index].image.height
     });
-
-    index++;
-  }
+  });
 };
 
 export const validationStatusForGetRequest = (response) => {
@@ -51,5 +72,11 @@ export const validationStatusForPostRequest = (response) => {
     return response;
   } else {
     throw new Error(`${response.status}: ${response.statusText}`);
+  }
+};
+
+export const initPromisePolyfill = () => {
+  if (!window.Promise) {
+    window.Promise = Promise;
   }
 };
