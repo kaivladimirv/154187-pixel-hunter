@@ -46,8 +46,13 @@ class RulesView extends AbstractView {
 
   clearHandlers() {
     this._btnRulesSubmit.removeEventListener('click', this._onClick);
+    this._btnRulesSubmit = null;
+
     this._headerBack.removeEventListener('click', this._onBackClick);
+    this._headerBack = null;
+
     this._inputRules.removeEventListener('input', this._onInput);
+    this._inputRules = null;
   }
 
   _onClick(e) {
@@ -71,11 +76,8 @@ class RulesView extends AbstractView {
   }
 
   destroy() {
-    super.destroy();
     this._data = null;
-    this._btnRulesSubmit = null;
-    this._inputRules = null;
-    this._headerBack = null;
+    super.destroy();
   }
 }
 

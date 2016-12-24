@@ -38,6 +38,7 @@ export default class HeaderView extends AbstractView {
 
   clearHandlers() {
     this._headerBack.removeEventListener('click', this._onClick);
+    this._headerBack = null;
   }
 
   _onClick() {
@@ -47,9 +48,8 @@ export default class HeaderView extends AbstractView {
   }
 
   destroy() {
-    super.destroy();
     this._data = null;
     this._onBack = null;
-    this._headerBack = null;
+    super.destroy();
   }
 }

@@ -24,6 +24,7 @@ class IntroView extends AbstractView {
 
   clearHandlers() {
     this._btn.removeEventListener('click', this._onClick);
+    this._btn = null;
   }
 
   _onClick() {
@@ -32,9 +33,8 @@ class IntroView extends AbstractView {
   }
 
   destroy() {
-    super.destroy();
     this._data = null;
-    this._btn = null;
+    super.destroy();
   }
 }
 

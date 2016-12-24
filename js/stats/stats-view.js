@@ -30,6 +30,7 @@ class StatsView extends AbstractView {
 
   clearHandlers() {
     this._headerBack.removeEventListener('click', this._onClick);
+    this._headerBack = null;
   }
 
   _onClick() {
@@ -38,10 +39,9 @@ class StatsView extends AbstractView {
   }
 
   destroy() {
-    super.destroy();
     this._data = null;
     this._history = null;
-    this._headerBack = null;
+    super.destroy();
   }
 }
 

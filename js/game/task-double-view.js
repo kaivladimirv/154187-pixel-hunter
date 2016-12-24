@@ -54,6 +54,7 @@ export default class TaskDoubleView extends AbstractView {
 
   clearHandlers() {
     this._clickablElement.removeEventListener('click', this._onClick);
+    this._clickablElement = null;
   }
 
   _onClick(e) {
@@ -85,10 +86,9 @@ export default class TaskDoubleView extends AbstractView {
   }
 
   destroy() {
-    super.destroy();
     this._data = null;
     this._dataStats = null;
     this._onAnswer = null;
-    this._clickablElement = null;
+    super.destroy();
   }
 }
