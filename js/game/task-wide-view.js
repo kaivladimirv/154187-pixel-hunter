@@ -59,6 +59,13 @@ export default class TaskDoubleView extends AbstractView {
     }
 
     this._onAnswer(e.target.value);
+    this.destroy();
+  }
+
+  destroy() {
+    super.destroy();
+    this._data = null;
+    this._dataStats = null;
+    this._onAnswer = null;
   }
 }
-

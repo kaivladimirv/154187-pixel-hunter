@@ -41,5 +41,12 @@ export default class HeaderView extends AbstractView {
   _onClick() {
     this._onBack();
     Application.showWelcome();
+    this.destroy();
+  }
+
+  destroy() {
+    super.destroy();
+    this._data = null;
+    this._onBack = null;
   }
 }

@@ -53,6 +53,7 @@ export default class TaskTripleView extends AbstractView {
     e.target.classList.add('game__option--selected');
 
     this._onAnswer(this._getAnswers());
+    this.destroy();
   }
 
   _getAnswers() {
@@ -71,5 +72,12 @@ export default class TaskTripleView extends AbstractView {
     }
 
     return -1;
+  }
+
+  destroy() {
+    super.destroy();
+    this._data = null;
+    this._dataStats = null;
+    this._onAnswer = null;
   }
 }

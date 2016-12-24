@@ -65,6 +65,7 @@ export default class TaskDoubleView extends AbstractView {
     }
 
     this._onAnswer(answers);
+    this.destroy();
   }
 
   _getAnswers() {
@@ -79,5 +80,12 @@ export default class TaskDoubleView extends AbstractView {
     }
 
     return answers;
+  }
+
+  destroy() {
+    super.destroy();
+    this._data = null;
+    this._dataStats = null;
+    this._onAnswer = null;
   }
 }

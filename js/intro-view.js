@@ -16,6 +16,7 @@ class IntroView extends AbstractView {
   }
 
   bindHandlers() {
+    this._onClick = this._onClick.bind(this);
     this._element.querySelector('.intro__asterisk').addEventListener('click', this._onClick);
   }
 
@@ -25,6 +26,12 @@ class IntroView extends AbstractView {
 
   _onClick() {
     Application.showGreeting();
+    this.destroy();
+  }
+
+  destroy() {
+    super.destroy();
+    this._data = null;
   }
 }
 

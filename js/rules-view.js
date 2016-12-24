@@ -35,6 +35,7 @@ class RulesView extends AbstractView {
     this._btnRulesSubmit = this._element.querySelector('.rules__button');
     this._btnRulesSubmit.addEventListener('click', this._onClick);
 
+    this._onBackClick = this._onBackClick.bind(this);
     this._headerBack = this._element.querySelector('.header__back');
     this._headerBack.addEventListener('click', this._onBackClick);
 
@@ -53,6 +54,7 @@ class RulesView extends AbstractView {
     e.preventDefault();
 
     Application.showGame(this._inputRules.value);
+    this.destroy();
   }
 
   _onInput(e) {
@@ -65,6 +67,15 @@ class RulesView extends AbstractView {
 
   _onBackClick() {
     Application.showWelcome();
+    this.destroy();
+  }
+
+  destroy() {
+    super.destroy();
+    this._data = null;
+    this._btnRulesSubmit = null;
+    this._inputRules = null;
+    this._headerBack = null;
   }
 }
 

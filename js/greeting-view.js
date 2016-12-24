@@ -25,6 +25,7 @@ class GreetingView extends AbstractView {
   }
 
   bindHandlers() {
+    this._onClick = this._onClick.bind(this);
     this._element.querySelector('.greeting__continue').addEventListener('click', this._onClick);
   }
 
@@ -34,7 +35,14 @@ class GreetingView extends AbstractView {
 
   _onClick() {
     Application.showRules();
+    this.destroy();
+  }
+
+  destroy() {
+    super.destroy();
+    this._data = null;
   }
 }
 
 export default (data) => new GreetingView(data).element;
+

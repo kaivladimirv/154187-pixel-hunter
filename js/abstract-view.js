@@ -26,4 +26,8 @@ export default class AbstractView {
 
   }
 
+  destroy() {
+    this.clearHandlers();
+    this._element = null;
+  }
 }
