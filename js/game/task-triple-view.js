@@ -8,6 +8,7 @@ export default class TaskTripleView extends AbstractView {
     this._data = data;
     this._dataStats = dataStats;
     this._onAnswer = null;
+    this._clickablElement = null;
   }
 
   set onAnswer(handler) {
@@ -37,15 +38,17 @@ export default class TaskTripleView extends AbstractView {
   bindHandlers() {
     loadImages(this._element.querySelectorAll('.game__content img'), this._data.answers);
 
-    this.onClick = this.onClick.bind(this);
-    this._element.querySelector('.game').addEventListener('click', this.onClick);
+    this._onClick = this._onClick.bind(this);
+    this._clickablElement = this._element.querySelector('.game');
+    this._clickablElement.addEventListener('click', this._onClick);
   }
 
   clearHandlers() {
-    this._element.querySelector('.game').removeEventListener('click', this.onClick);
+    this._clickablElement.removeEventListener('click', this._onClick);
+    this._clickablElement = null;
   }
 
-  onClick(e) {
+  _onClick(e) {
     if (!e.target.classList.contains('game__option')) {
       return;
     }
@@ -53,6 +56,7 @@ export default class TaskTripleView extends AbstractView {
     e.target.classList.add('game__option--selected');
 
     this._onAnswer(this._getAnswers());
+    this.destroy();
   }
 
   _getAnswers() {
@@ -61,15 +65,20 @@ export default class TaskTripleView extends AbstractView {
       return -1;
     }
 
-    let index = 0;
-    for (let element of answersElements) {
-      if (element.classList.contains('game__option--selected')) {
+    let elements = Array.prototype.slice.call(answersElements);
+    for (let index = 0; index < elements.length; index++) {
+      if (elements[index].classList.contains('game__option--selected')) {
         return index;
       }
-
-      index++;
     }
 
     return -1;
+  }
+
+  destroy() {
+    this._data = null;
+    this._dataStats = null;
+    this._onAnswer = null;
+    super.destroy();
   }
 }

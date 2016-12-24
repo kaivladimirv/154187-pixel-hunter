@@ -5,6 +5,7 @@ class IntroView extends AbstractView {
   constructor(data) {
     super();
     this._data = data;
+    this._btn = null;
   }
 
   getMarkup() {
@@ -16,15 +17,24 @@ class IntroView extends AbstractView {
   }
 
   bindHandlers() {
-    this._element.querySelector('.intro__asterisk').addEventListener('click', this.onClick);
+    this._onClick = this._onClick.bind(this);
+    this._btn = this._element.querySelector('.intro__asterisk');
+    this._btn.addEventListener('click', this._onClick);
   }
 
   clearHandlers() {
-    this._element.querySelector('.intro__asterisk').removeEventListener('click', this.onClick);
+    this._btn.removeEventListener('click', this._onClick);
+    this._btn = null;
   }
 
-  onClick() {
+  _onClick() {
     Application.showGreeting();
+    this.destroy();
+  }
+
+  destroy() {
+    this._data = null;
+    super.destroy();
   }
 }
 

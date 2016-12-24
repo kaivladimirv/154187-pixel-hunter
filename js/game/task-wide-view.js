@@ -9,6 +9,7 @@ export default class TaskDoubleView extends AbstractView {
     this._data = data;
     this._dataStats = dataStats;
     this._onAnswer = null;
+    this._clickablElement = null;
   }
 
   set onAnswer(handler) {
@@ -45,20 +46,29 @@ export default class TaskDoubleView extends AbstractView {
   bindHandlers() {
     loadImages(this._element.querySelectorAll('.game__content img'), this._data.answers);
 
-    this.onClick = this.onClick.bind(this);
-    this._element.querySelector('.game').addEventListener('click', this.onClick);
+    this._onClick = this._onClick.bind(this);
+    this._clickablElement = this._element.querySelector('.game');
+    this._clickablElement.addEventListener('click', this._onClick);
   }
 
   clearHandlers() {
-    this._element.querySelector('.game').removeEventListener('click', this.onClick);
+    this._clickablElement.removeEventListener('click', this._onClick);
+    this._clickablElement = null;
   }
 
-  onClick(e) {
+  _onClick(e) {
     if (!e.target.parentElement.classList.contains('game__answer') || !e.target.value) {
       return;
     }
 
     this._onAnswer(e.target.value);
+    this.destroy();
+  }
+
+  destroy() {
+    this._data = null;
+    this._dataStats = null;
+    this._onAnswer = null;
+    super.destroy();
   }
 }
-

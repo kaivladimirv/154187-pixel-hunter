@@ -18,7 +18,7 @@ export const initialData = {
 };
 
 export const setUserName = (stateGame, userName) => {
-  return Object.assign({}, stateGame, {
+  return mergeObjects(stateGame, {
     userName: userName
   });
 };
@@ -53,7 +53,7 @@ export const setCountLives = (stateGame, count) => {
     throw new RangeError(`Number of lives can not be more than ${gameSettings.maxLives}`);
   }
 
-  return Object.assign({}, stateGame, {
+  return mergeObjects(stateGame, {
     livesCount: count
   });
 };
@@ -66,7 +66,7 @@ export const setTime = (stateGame, time) => {
     throw new RangeError(`Time can not be more than ${gameSettings.timeLimit}`);
   }
 
-  return Object.assign({}, stateGame, {
+  return mergeObjects(stateGame, {
     time: time
   });
 };
@@ -76,7 +76,7 @@ export const setCurrentTaskNumber = (stateGame, taskNumber) => {
     throw new RangeError(`Task number ${taskNumber} does not exist`);
   }
 
-  return Object.assign({}, stateGame, {
+  return mergeObjects(stateGame, {
     currentTaskNumber: taskNumber
   });
 };
@@ -96,7 +96,7 @@ export const isRightAnswer = (taskNumber, answer) => {
       return (answer && (answer === task.answers[0].type));
 
     case taskTypes.ONE_OF_THREE:
-      return (Number.isInteger(answer) && task.answers[answer].type === answerTypes.PAINTING);
+      return (!isNaN(parseInt(answer, 10)) && task.answers[answer].type === answerTypes.PAINTING);
 
     default:
       throw new Error(`Unknown type task ${task.type}`);

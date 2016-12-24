@@ -9,6 +9,7 @@ export default class TaskDoubleView extends AbstractView {
     this._data = data;
     this._dataStats = dataStats;
     this._onAnswer = null;
+    this._clickablElement = null;
   }
 
   set onAnswer(handler) {
@@ -21,7 +22,7 @@ export default class TaskDoubleView extends AbstractView {
       <form class="game__content">
         ${this._data.answers.map((value, index) => `
           <div class="game__option">
-            <img src="" alt="Option${index + 1}}" width="468" height="458">
+            <img src="" alt="Option${index + 1}" width="468" height="458">
             <label class="game__answer game__answer--photo">
               <input name="question${index + 1}" type="radio" value="${answerTypes.PHOTO}">
               <span>Фото</span>
@@ -46,15 +47,17 @@ export default class TaskDoubleView extends AbstractView {
   bindHandlers() {
     loadImages(this._element.querySelectorAll('.game__content img'), this._data.answers);
 
-    this.onClick = this.onClick.bind(this);
-    this._element.querySelector('.game').addEventListener('click', this.onClick);
+    this._onClick = this._onClick.bind(this);
+    this._clickablElement = this._element.querySelector('.game');
+    this._clickablElement.addEventListener('click', this._onClick);
   }
 
   clearHandlers() {
-    this._element.querySelector('.game').removeEventListener('click', this.onClick);
+    this._clickablElement.removeEventListener('click', this._onClick);
+    this._clickablElement = null;
   }
 
-  onClick(e) {
+  _onClick(e) {
     if (!e.target.parentElement.classList.contains('game__answer')) {
       return;
     }
@@ -65,6 +68,7 @@ export default class TaskDoubleView extends AbstractView {
     }
 
     this._onAnswer(answers);
+    this.destroy();
   }
 
   _getAnswers() {
@@ -74,10 +78,17 @@ export default class TaskDoubleView extends AbstractView {
     }
 
     const answers = [];
-    for (let element of answersElements) {
+    [].forEach.call(answersElements, (element) => {
       answers.push(element.value);
-    }
+    });
 
     return answers;
+  }
+
+  destroy() {
+    this._data = null;
+    this._dataStats = null;
+    this._onAnswer = null;
+    super.destroy();
   }
 }

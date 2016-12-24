@@ -5,6 +5,15 @@ export default class AbstractView {
     this._element = null;
   }
 
+  get element() {
+    if (!this._element) {
+      this._element = createElementFromTemplate(this.getMarkup());
+      this.bindHandlers();
+    }
+
+    return this._element;
+  }
+
   getMarkup() {
     throw new Error('Method getMarkup is not defined');
   }
@@ -17,12 +26,8 @@ export default class AbstractView {
 
   }
 
-  get element() {
-    if (!this._element) {
-      this._element = createElementFromTemplate(this.getMarkup());
-      this.bindHandlers();
-    }
-
-    return this._element;
+  destroy() {
+    this.clearHandlers();
+    this._element = null;
   }
 }
