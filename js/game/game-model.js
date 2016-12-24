@@ -32,7 +32,7 @@ export default class GameModel {
 
   reset() {
     this._state = initialData;
-    this._state.stats = new Array(getTasksCount()).join(' ').split(' ').map((value) => 'unknown');
+    this._state.stats = [...new Array(getTasksCount())].map(() => 'unknown');
     this._state = setUserName(this._state, this._userName);
   }
 
