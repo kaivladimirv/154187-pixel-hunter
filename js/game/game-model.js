@@ -85,7 +85,7 @@ export default class GameModel {
       lives: this._state.livesCount
     });
 
-    return window.fetch(Application.severUrl + 'pixel-hunter/stats/' + this._state.userName,
+    return window.fetch(Application.serverUrl + 'pixel-hunter/stats/' + this._state.userName,
       {
         method: 'POST',
         headers: {
@@ -98,7 +98,7 @@ export default class GameModel {
   }
 
   getHistoryResults() {
-    return window.fetch(Application.severUrl + 'pixel-hunter/stats/' + this._state.userName)
+    return window.fetch(Application.serverUrl + 'pixel-hunter/stats/' + this._state.userName)
         .then(validationStatusForGetRequest)
         .then((response) => response.json())
         .then((historyResults) => {

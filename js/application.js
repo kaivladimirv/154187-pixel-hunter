@@ -14,7 +14,7 @@ let gameData;
 
 export default class Application {
 
-  static get severUrl() {
+  static get serverUrl() {
     return 'https://intensive-ecmascript-server-nnpnvhhedl.now.sh/';
   }
 
