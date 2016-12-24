@@ -47,6 +47,7 @@
     "gulp-sass": "2.3.2",
     "gulp-sourcemaps": "2.2.0",
     "gulp-webpack": "1.5.0",
+    "promise-polyfill": "6.0.2",
     "webpack": "1.13.3"
   },
   "engines": {
