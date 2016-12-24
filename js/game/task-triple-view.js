@@ -64,13 +64,11 @@ export default class TaskTripleView extends AbstractView {
       return -1;
     }
 
-    let index = 0;
-    for (let element of answersElements) {
-      if (element.classList.contains('game__option--selected')) {
+    let elements = Array.prototype.slice.call(answersElements);
+    for (let index = 0; index < elements.length; index++) {
+      if (elements[index].classList.contains('game__option--selected')) {
         return index;
       }
-
-      index++;
     }
 
     return -1;

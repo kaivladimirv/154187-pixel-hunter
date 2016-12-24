@@ -77,9 +77,9 @@ export default class TaskDoubleView extends AbstractView {
     }
 
     const answers = [];
-    for (let element of answersElements) {
+    [].forEach.call(answersElements, (element) => {
       answers.push(element.value);
-    }
+    });
 
     return answers;
   }
